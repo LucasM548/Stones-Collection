@@ -177,6 +177,8 @@ h1 {
   transform: translateY(-50%);
   width: 90%;
   max-width: 450px;
+  max-height: 85vh; /* Limite la hauteur à 85% de la vue */
+  overflow-y: auto; /* Ajoute une barre de défilement verticale si nécessaire */
   background: rgba(48, 43, 99, 0.9); /* Fond semi-transparent */
   backdrop-filter: blur(10px); /* Effet de flou derrière */
   border-radius: 15px;
@@ -186,12 +188,37 @@ h1 {
   z-index: 10;
   color: #f0f0f0;
   border: 1px solid rgba(255, 255, 255, 0.2);
+
+  /* Styles Firefox pour la scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #8c4dff rgba(48, 43, 99, 0.5); /* thumb track */
+}
+
+/* Styles Webkit (Chrome, Safari, Edge) pour la scrollbar */
+.info-panel::-webkit-scrollbar {
+  width: 8px; /* Largeur de la scrollbar */
+}
+
+.info-panel::-webkit-scrollbar-track {
+  background: rgba(48, 43, 99, 0.5); /* Couleur de fond de la piste */
+  border-radius: 10px;
+}
+
+.info-panel::-webkit-scrollbar-thumb {
+  background-color: #8c4dff; /* Couleur du "pouce" (la partie mobile) - Couleur 3ème oeil */
+  border-radius: 10px;
+  border: 2px solid rgba(48, 43, 99, 0.5); /* Espace autour du pouce */
+}
+
+.info-panel::-webkit-scrollbar-thumb:hover {
+  background-color: #a377ff; /* Couleur au survol */
 }
 
 .info-panel.visible {
   right: 20px; /* Position visible */
 }
 
+/* Titre et Bouton Fermer du Panneau */
 .info-panel h2 {
   margin-bottom: 20px;
   color: #e0e0ff;
@@ -210,11 +237,12 @@ h1 {
   cursor: pointer;
   transition: color 0.3s ease;
 }
+
 .close-panel:hover {
-  color: #ff77ff;
+  color: #ff77ff; /* Couleur couronne au survol */
 }
 
-/* Styles des onglets */
+/* Tabs */
 .tabs {
   display: flex;
   margin-bottom: 20px;
@@ -351,7 +379,7 @@ h1 {
   padding: 0;
   text-align: left;
   max-height: 200px; /* Limite la hauteur */
-  overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+  overflow-y: auto; /* Ajoute une barre de défilement verticale si nécessaire */
 }
 
 #stone-list li {

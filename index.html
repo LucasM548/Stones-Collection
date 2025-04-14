@@ -79,16 +79,25 @@
               <textarea id="stone-virtues" rows="3" required></textarea>
             </div>
             <div class="form-group">
-              <label for="jewelry-type">Type de bijou :</label>
-              <select id="jewelry-type">
-                <option value="Aucun">Aucun / Pierre brute</option>
-                <option value="Collier">Collier</option>
-                <option value="Bracelet">Bracelet</option>
-                <option value="Bague">Bague</option>
-                <option value="Pendentif">Pendentif</option>
-                <option value="Boucles d'oreilles">Boucles d'oreilles</option>
-                <option value="Autre">Autre</option>
-              </select>
+              <label for="stone-purification">Type de purification :</label>
+              <input type="text" id="stone-purification" placeholder="Ex : Eau distillée, Sel indirect, Fumigation..." />
+            </div>
+            <div class="form-group">
+              <label for="stone-recharge">Type de rechargement :</label>
+              <input type="text" id="stone-recharge" placeholder="Ex : Lumière solaire, Lune, Amas de quartz..."/>
+            </div>
+            <div class="form-group">
+              <label>Type(s) de bijou :</label>
+              <div class="checkbox-group" id="jewelry-type-group">
+                 <label><input type="checkbox" name="jewelry-type" value="Pierre brute"> Pierre brute</label>
+                 <label><input type="checkbox" name="jewelry-type" value="Collier"> Collier</label>
+                 <label><input type="checkbox" name="jewelry-type" value="Bracelet"> Bracelet</label>
+                 <label><input type="checkbox" name="jewelry-type" value="Bague"> Bague</label>
+                 <label><input type="checkbox" name="jewelry-type" value="Pendentif"> Pendentif</label>
+                 <label><input type="checkbox" name="jewelry-type" value="Boucles d'oreilles"> Boucles d'oreilles</label>
+                 <label><input type="checkbox" name="jewelry-type" value="Autre"> Autre</label>
+                 <!-- Ajoutez d'autres types si nécessaire -->
+              </div>
             </div>
             <div class="form-group">
               <label for="stone-image">Image (optionnel) :</label>
