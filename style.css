@@ -1,0 +1,655 @@
+/* Définition des variables de couleur des chakras */
+:root {
+  --chakra-color-root: #ff4d4d;
+  --chakra-color-sacral: #ff9a4d;
+  --chakra-color-solar-plexus: #ffdd4d;
+  --chakra-color-heart: #77dd77;
+  --chakra-color-throat: #77b5fe;
+  --chakra-color-third-eye: #8c4dff; /* Basé sur la couleur fill du SVG */
+  --chakra-color-crown: #ff77ff;
+}
+
+/* Classes pour appliquer les couleurs au texte */
+.text-color-root { color: var(--chakra-color-root); }
+.text-color-sacral { color: var(--chakra-color-sacral); }
+.text-color-solar-plexus { color: var(--chakra-color-solar-plexus); }
+.text-color-heart { color: var(--chakra-color-heart); }
+.text-color-throat { color: var(--chakra-color-throat); }
+.text-color-third-eye { color: var(--chakra-color-third-eye); }
+.text-color-crown { color: var(--chakra-color-crown); }
+
+/* Couleurs du texte pour les noms de pierres par chakra */
+.text-color-root {
+  color: #FF0000; /* Rouge */
+}
+
+.text-color-sacral {
+  color: #FFA500; /* Orange */
+}
+
+.text-color-solar-plexus {
+  color: #FFFF00; /* Jaune */
+}
+
+.text-color-heart {
+  color: #008000; /* Vert */
+}
+
+.text-color-throat {
+  color: #87CEEB; /* Bleu clair */
+}
+
+.text-color-third-eye {
+  color: #4B0082; /* Indigo */
+}
+
+.text-color-crown {
+  color: #8A2BE2; /* Violet */
+}
+
+/* Réinitialisation et styles de base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: #f0f0f0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-x: hidden; /* Empêche le débordement horizontal */
+  position: relative; /* Pour le positionnement du glow */
+}
+
+/* Effet de lueur en arrière-plan */
+.background-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60vw;
+  height: 60vw;
+  max-width: 800px;
+  max-height: 800px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(76, 76, 179, 0.3),
+    rgba(76, 76, 179, 0) 70%
+  );
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(50px);
+  z-index: 0;
+  pointer-events: none; /* Ne pas interférer avec les clics */
+}
+
+.container {
+  text-align: center;
+  position: relative; /* Contexte pour le positionnement absolu des chakras */
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px; /* Limite la largeur sur les grands écrans */
+}
+
+h1 {
+  font-size: 2.8em;
+  margin-bottom: 10px;
+  color: #e0e0ff;
+  text-shadow: 0 0 15px rgba(180, 180, 255, 0.7);
+}
+
+.subtitle {
+  font-size: 1.1em;
+  margin-bottom: 40px;
+  color: #c0c0f0;
+}
+
+.chakra-container {
+  position: relative;
+  height: 65vh; /* Hauteur pour espacer les chakras */
+  max-height: 500px; /* Hauteur max */
+  width: 100px; /* Largeur pour centrer les chakras */
+  margin: 0 auto; /* Centrer le conteneur */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espace les chakras verticalement */
+  align-items: center;
+  margin-bottom: 30px; /* Espace avant le panneau */
+}
+
+.chakra-stone {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative; /* Permet un z-index si nécessaire */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Couleurs et ombres des chakras */
+#root {
+  background-color: #ff4d4d;
+  box-shadow: 0 0 15px #ff4d4d, 0 0 25px #ff4d4d;
+}
+#sacral {
+  background-color: #ff9a4d;
+  box-shadow: 0 0 15px #ff9a4d, 0 0 25px #ff9a4d;
+}
+#solar-plexus {
+  background-color: #ffdd4d;
+  box-shadow: 0 0 15px #ffdd4d, 0 0 25px #ffdd4d;
+}
+#heart {
+  background-color: #77dd77;
+  box-shadow: 0 0 15px #77dd77, 0 0 25px #77dd77;
+}
+#throat {
+  background-color: #77b5fe;
+  box-shadow: 0 0 15px #77b5fe, 0 0 25px #77b5fe;
+}
+#third-eye {
+  background-color: #8241de;
+  box-shadow: 0 0 15px #8241de, 0 0 25px #8241de;
+}
+#crown {
+  background-color: #ff77ff;
+  box-shadow: 0 0 15px #ff77ff, 0 0 25px #ff77ff;
+}
+
+.chakra-stone:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 25px currentColor, 0 0 40px currentColor; /* Utilise la couleur de fond pour l'ombre */
+}
+
+/* Panneau d'information */
+.info-panel {
+  position: fixed; /* Fixe par rapport à la fenêtre */
+  top: 50%;
+  right: -500px; /* Initialement hors écran */
+  transform: translateY(-50%);
+  width: 90%;
+  max-width: 450px;
+  background: rgba(48, 43, 99, 0.9); /* Fond semi-transparent */
+  backdrop-filter: blur(10px); /* Effet de flou derrière */
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+  transition: right 0.5s ease-in-out; /* Animation fluide */
+  z-index: 10;
+  color: #f0f0f0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.info-panel.visible {
+  right: 20px; /* Position visible */
+}
+
+.info-panel h2 {
+  margin-bottom: 20px;
+  color: #e0e0ff;
+  text-align: center;
+  font-size: 1.6em;
+}
+
+.close-panel {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #f0f0f0;
+  font-size: 2em;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.close-panel:hover {
+  color: #ff77ff;
+}
+
+/* Styles des onglets */
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.tab-link {
+  padding: 10px 15px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #c0c0f0;
+  font-size: 1em;
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px; /* Pour aligner avec la bordure du conteneur */
+}
+
+.tab-link:hover {
+  color: #fff;
+}
+
+.tab-link.active {
+  color: #fff; /* Couleur par défaut pour l'onglet actif */
+  border-bottom: 3px solid #fff; /* Bordure par défaut */
+}
+
+/* Application dynamique de la couleur du chakra à l'onglet actif */
+.info-panel.chakra-active-color-root .tab-link.active {
+  color: var(--chakra-color-root);
+  border-bottom-color: var(--chakra-color-root);
+}
+.info-panel.chakra-active-color-sacral .tab-link.active {
+  color: var(--chakra-color-sacral);
+  border-bottom-color: var(--chakra-color-sacral);
+}
+.info-panel.chakra-active-color-solar-plexus .tab-link.active {
+  color: var(--chakra-color-solar-plexus);
+  border-bottom-color: var(--chakra-color-solar-plexus);
+}
+.info-panel.chakra-active-color-heart .tab-link.active {
+  color: var(--chakra-color-heart);
+  border-bottom-color: var(--chakra-color-heart);
+}
+.info-panel.chakra-active-color-throat .tab-link.active {
+  color: var(--chakra-color-throat);
+  border-bottom-color: var(--chakra-color-throat);
+}
+.info-panel.chakra-active-color-third-eye .tab-link.active {
+  color: var(--chakra-color-third-eye);
+  border-bottom-color: var(--chakra-color-third-eye);
+}
+.info-panel.chakra-active-color-crown .tab-link.active {
+  color: var(--chakra-color-crown);
+  border-bottom-color: var(--chakra-color-crown);
+}
+
+/* Contenu des onglets */
+.tab-content {
+  display: none; /* Caché par défaut */
+  animation: fadeIn 0.5s ease;
+}
+
+.tab-content.active {
+  display: block; /* Afficher l'onglet actif */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Styles du formulaire */
+#add-stone-form .form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+#add-stone-form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #c0c0f0;
+  font-weight: 400;
+}
+
+#add-stone-form input[type="text"],
+#add-stone-form textarea,
+#add-stone-form select {
+  width: 100%;
+  max-width: 100%;
+  max-height: 400px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.2);
+  color: #f0f0f0;
+  font-family: "Poppins", sans-serif;
+}
+
+#add-stone-form input[type="text"]:focus,
+#add-stone-form textarea:focus,
+#add-stone-form select:focus {
+  outline: none;
+  border-color: #ff77ff;
+  box-shadow: 0 0 8px rgba(255, 119, 255, 0.5);
+}
+
+#add-stone-form button[type="submit"] {
+  background-color: #8c4dff;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+}
+
+#add-stone-form button[type="submit"]:hover {
+  background-color: #a36eff;
+  transform: translateY(-2px);
+}
+
+/* Liste des pierres */
+#stone-list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  max-height: 200px; /* Limite la hauteur */
+  overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+}
+
+#stone-list li {
+  background: rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border-left: 4px solid #77b5fe;
+}
+#stone-list li strong {
+  color: #e0e0ff;
+  display: block;
+  margin-bottom: 4px;
+}
+#stone-list li em {
+  /* Pour le message "aucune pierre" */
+  color: #aaa;
+  font-style: italic;
+}
+
+/* Nouveau: Style pour l'image dans la liste des pierres */
+.stone-list-image {
+  max-width: 500px; /* Taille maximale de l'image */
+  max-height: 100px;
+  border-radius: 5px; /* Bords arrondis */
+  margin-top: 8px; /* Espace au-dessus de l'image */
+  vertical-align: middle; /* Alignement vertical si besoin */
+  object-fit: cover; /* S'assure que l'image couvre l'espace sans se déformer */
+}
+
+/* Styles pour la Modale de Confirmation */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent */
+  display: flex; /* Utiliser flex pour centrer */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Au-dessus de tout le reste */
+  opacity: 0; /* Caché par défaut */
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: rgba(48, 43, 99, 0.95); /* Similaire au panneau */
+  backdrop-filter: blur(5px);
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  color: #f0f0f0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: scale(0.9); /* Effet d'apparition */
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.visible .modal-content {
+  transform: scale(1);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #e0e0ff;
+}
+
+.modal-content p {
+  margin-bottom: 25px;
+  font-size: 1.1em;
+}
+
+.modal-buttons button {
+  padding: 10px 25px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-buttons .btn-danger {
+  background-color: #ff4d4d;
+  color: white;
+}
+.modal-buttons .btn-danger:hover {
+  background-color: #e60000;
+  transform: translateY(-2px);
+}
+
+.modal-buttons .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+.modal-buttons .btn-secondary:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
+/* Style pour le bouton Supprimer dans la liste */
+.delete-stone-btn {
+  background-color: transparent;
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-left: 15px;
+  float: right; /* Aligne le bouton à droite */
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.delete-stone-btn:hover {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.chakra-svg-container {
+  display: block; /* S'assurer qu'il se comporte comme un bloc */
+  margin-left: auto; /* Marge automatique à gauche */
+  margin-right: auto; /* Marge automatique à droite */
+  width: 80%; /* Largeur relative */
+  max-width: 600px; /* Largeur maximale pour éviter qu'il soit trop grand */
+  margin-bottom: 30px; /* Ajouter un peu d'espace en dessous */
+  /* Ajout du masque pour fondre les bords */
+  mask-image: radial-gradient(ellipse closest-side, black 70%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse closest-side, black 70%, transparent 100%); /* Pour compatibilité Webkit/Blink */
+}
+
+#chakra-svg {
+  display: block; /* Assure que le SVG ne prend pas d'espace 'inline' supplémentaire */
+  width: 100%; /* Prend toute la largeur de son conteneur */
+  height: auto; /* Maintient le ratio d'aspect */
+}
+
+.chakra-svg-stone {
+  cursor: pointer;
+  /* Assurez-vous que la transition inclut filter et fill-opacity */
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    /* Effet rebondissant léger */ filter 0.4s ease, fill-opacity 0.3s ease;
+  fill-opacity: 0.85; /* Légèrement plus visible par défaut */
+}
+
+/* Couleurs spécifiques (similaires aux box-shadow précédentes) */
+#svg-root {
+  fill: #ff4d4d;
+  filter: drop-shadow(0 0 6px #ff4d4d); /* Ombre initiale un peu plus douce */
+}
+#svg-sacral {
+  fill: #ff9a4d;
+  filter: drop-shadow(0 0 6px #ff9a4d);
+}
+#svg-solar-plexus {
+  fill: #ffdd4d;
+  filter: drop-shadow(0 0 6px #ffdd4d);
+}
+#svg-heart {
+  fill: #77dd77;
+  filter: drop-shadow(0 0 6px #77dd77);
+}
+#svg-throat {
+  fill: #77b5fe;
+  filter: drop-shadow(0 0 6px #77b5fe);
+}
+#svg-third-eye {
+  fill: #8c4dff;
+  filter: drop-shadow(0 0 6px #8c4dff);
+}
+#svg-crown {
+  fill: #ff77ff;
+  filter: drop-shadow(0 0 6px #ff77ff);
+}
+
+.chakra-svg-stone:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.8))
+    drop-shadow(0 0 10px currentColor);
+  fill-opacity: 1; /* Pleinement opaque au survol */
+}
+
+/* Ajustement CSS que vous aviez ajouté */
+#add-stone-form input[type="text"],
+#add-stone-form textarea,
+#add-stone-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.2);
+  color: #f0f0f0;
+  font-family: "Poppins", sans-serif;
+}
+
+#add-stone-form textarea {
+  max-height: 200px; /* Limite plus raisonnable */
+  min-height: 60px; /* Hauteur minimale */
+}
+
+/* Ajustements responsives pour le positionnement des chakras */
+@media (max-width: 768px) {
+  .chakra-image-container {
+    width: 70%;
+    max-width: 300px;
+  }
+  .chakra-stone {
+    width: 30px;
+    height: 30px;
+  }
+  /* Ré-estimer les positions top si nécessaire pour mobile */
+}
+@media (max-width: 480px) {
+  .chakra-image-container {
+    width: 60%;
+    max-width: 250px;
+  }
+  .chakra-stone {
+    width: 25px;
+    height: 25px;
+  }
+  /* Ré-estimer les positions top si nécessaire pour petit mobile */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.2em;
+  }
+  .subtitle {
+    font-size: 1em;
+  }
+  .chakra-container {
+    height: 55vh;
+    width: 80px;
+  }
+  .chakra-stone {
+    width: 40px;
+    height: 40px;
+  }
+
+  .info-panel {
+    width: 95%;
+    max-width: none; /* Prend presque toute la largeur */
+    right: -100%; /* Commence complètement hors écran */
+    top: auto; /* Ne plus centrer verticalement */
+    bottom: 10px; /* Aligner en bas */
+    transform: translateY(0); /* Réinitialiser la transformation Y */
+    transition: right 0.4s ease-in-out, bottom 0.4s ease-in-out; /* Transition pour right et bottom */
+  }
+  .info-panel.visible {
+    right: 2.5%; /* Centrer horizontalement avec 2.5% de marge */
+    bottom: 10px;
+  }
+  .info-panel h2 {
+    font-size: 1.4em;
+  }
+  .tab-link {
+    font-size: 0.9em;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8em;
+  }
+  .subtitle {
+    font-size: 0.9em;
+    margin-bottom: 30px;
+  }
+  .chakra-container {
+    height: 50vh;
+    width: 60px;
+  }
+  .chakra-stone {
+    width: 35px;
+    height: 35px;
+  }
+  .info-panel {
+    padding: 15px;
+  }
+  .info-panel h2 {
+    font-size: 1.3em;
+  }
+  .tab-link {
+    font-size: 0.8em;
+    padding: 8px;
+  }
+  #add-stone-form button[type="submit"] {
+    padding: 10px 15px;
+  }
+}

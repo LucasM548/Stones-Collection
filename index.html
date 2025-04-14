@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mes Pierres Énergétiques</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="background-glow"></div>
+    <div class="container">
+      <h1>Harmonie des Chakras</h1>
+      <p class="subtitle">Site créé pour <b>Nono</b> la kawaine 💖</p>
+<div class="chakra-svg-container">
+    <svg id="chakra-svg"
+         viewBox="0 0 1000 1461"
+         preserveAspectRatio="xMidYMid meet">
+
+        <image href="https://witches-box.fr/wp-content/uploads/2021/09/shutterstock_1430190272.png"
+               x="0" y="0" width="1000" height="1461"
+               preserveAspectRatio="xMidYMid slice" />
+
+        <circle class="chakra-svg-stone" id="svg-crown" data-chakra-name="Couronne (Sahasrara)" cx="500" cy="235" r="40" />
+        <circle class="chakra-svg-stone" id="svg-third-eye" data-chakra-name="Troisième Œil (Ajna)" cx="500" cy="373" r="40" />
+        <circle class="chakra-svg-stone" id="svg-throat" data-chakra-name="Gorge (Vishuddha)" cx="500" cy="510" r="40" />
+        <circle class="chakra-svg-stone" id="svg-heart" data-chakra-name="Cœur (Anahata)" cx="500" cy="665" r="40" />
+        <circle class="chakra-svg-stone" id="svg-solar-plexus" data-chakra-name="Plexus Solaire (Manipura)" cx="500" cy="819" r="40" />
+        <circle class="chakra-svg-stone" id="svg-sacral" data-chakra-name="Sacré (Swadhisthana)" cx="500" cy="977" r="40" />
+        <circle class="chakra-svg-stone" id="svg-root" data-chakra-name="Racine (Muladhara)" cx="500" cy="1135" r="40" />
+
+    </svg>
+</div>
+      </div>
+
+      <!-- Panneau d'information (initiallement caché) -->
+      <div class="info-panel" id="info-panel">
+        <button class="close-panel" id="close-panel">×</button>
+        <h2 id="panel-chakra-name">Infos Chakra</h2>
+        <nav class="tabs">
+          <button class="tab-link active" data-tab="tab-general">
+            Infos Générales
+          </button>
+          <button class="tab-link" data-tab="tab-my-stones">Mes pierres</button>
+          <button class="tab-link" data-tab="tab-add-stone">
+            Ajouter une pierre
+          </button>
+        </nav>
+
+        <div class="tab-content active" id="tab-general">
+          <p>
+            Informations générales sur le chakra sélectionné apparaîtront ici.
+          </p>
+          <p><em>(Contenu à ajouter dynamiquement ou statiquement)</em></p>
+        </div>
+
+        <div class="tab-content" id="tab-my-stones">
+          <h3>Ma collection de pierres associées</h3>
+          <ul id="stone-list">
+            <!-- Les pierres ajoutées apparaîtront ici -->
+            <li><em>Aucune pierre ajoutée pour le moment.</em></li>
+          </ul>
+        </div>
+
+        <div class="tab-content" id="tab-add-stone">
+          <h3>Ajouter une nouvelle pierre</h3>
+          <form id="add-stone-form">
+            <div class="form-group">
+              <label for="stone-name">Nom de la pierre :</label>
+              <input type="text" id="stone-name" required />
+            </div>
+            <div class="form-group">
+              <label for="stone-virtues">Vertus principales :</label>
+              <textarea id="stone-virtues" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="jewelry-type">Type de bijou :</label>
+              <select id="jewelry-type">
+                <option value="Aucun">Aucun / Pierre brute</option>
+                <option value="Collier">Collier</option>
+                <option value="Bracelet">Bracelet</option>
+                <option value="Bague">Bague</option>
+                <option value="Pendentif">Pendentif</option>
+                <option value="Boucles d'oreilles">Boucles d'oreilles</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="stone-image">Image (optionnel) :</label>
+              <input type="file" id="stone-image" accept="image/*" />
+            </div>
+            <button type="submit">Ajouter la pierre</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Modale de Confirmation de Suppression -->
+    <div id="confirmation-modal" class="modal-overlay" style="display: none">
+      <div class="modal-content">
+        <h2>Confirmation</h2>
+        <p>Êtes-vous sûr de vouloir supprimer cette pierre ?</p>
+        <div class="modal-buttons">
+          <button id="confirm-delete-btn" class="btn-danger">Confirmer</button>
+          <button id="cancel-delete-btn" class="btn-secondary">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
