@@ -18,35 +18,6 @@
 .text-color-third-eye { color: var(--chakra-color-third-eye); }
 .text-color-crown { color: var(--chakra-color-crown); }
 
-/* Couleurs du texte pour les noms de pierres par chakra */
-.text-color-root {
-  color: #FF0000; /* Rouge */
-}
-
-.text-color-sacral {
-  color: #FFA500; /* Orange */
-}
-
-.text-color-solar-plexus {
-  color: #FFFF00; /* Jaune */
-}
-
-.text-color-heart {
-  color: #008000; /* Vert */
-}
-
-.text-color-throat {
-  color: #87CEEB; /* Bleu clair */
-}
-
-.text-color-third-eye {
-  color: #4B0082; /* Indigo */
-}
-
-.text-color-crown {
-  color: #8A2BE2; /* Violet */
-}
-
 /* Réinitialisation et styles de base */
 * {
   margin: 0;
@@ -530,32 +501,32 @@ h1 {
 
 /* Couleurs spécifiques (similaires aux box-shadow précédentes) */
 #svg-root {
-  fill: #ff4d4d;
-  filter: drop-shadow(0 0 6px #ff4d4d); /* Ombre initiale un peu plus douce */
+  fill: var(--chakra-color-root);
+  filter: drop-shadow(0 0 6px var(--chakra-color-root)); /* Ombre initiale un peu plus douce */
 }
 #svg-sacral {
-  fill: #ff9a4d;
-  filter: drop-shadow(0 0 6px #ff9a4d);
+  fill: var(--chakra-color-sacral);
+  filter: drop-shadow(0 0 6px var(--chakra-color-sacral));
 }
 #svg-solar-plexus {
-  fill: #ffdd4d;
-  filter: drop-shadow(0 0 6px #ffdd4d);
+  fill: var(--chakra-color-solar-plexus);
+  filter: drop-shadow(0 0 6px var(--chakra-color-solar-plexus));
 }
 #svg-heart {
-  fill: #77dd77;
-  filter: drop-shadow(0 0 6px #77dd77);
+  fill: var(--chakra-color-heart);
+  filter: drop-shadow(0 0 6px var(--chakra-color-heart));
 }
 #svg-throat {
-  fill: #77b5fe;
-  filter: drop-shadow(0 0 6px #77b5fe);
+  fill: var(--chakra-color-throat);
+  filter: drop-shadow(0 0 6px var(--chakra-color-throat));
 }
 #svg-third-eye {
-  fill: #8c4dff;
-  filter: drop-shadow(0 0 6px #8c4dff);
+  fill: var(--chakra-color-third-eye);
+  filter: drop-shadow(0 0 6px var(--chakra-color-third-eye));
 }
 #svg-crown {
-  fill: #ff77ff;
-  filter: drop-shadow(0 0 6px #ff77ff);
+  fill: var(--chakra-color-crown);
+  filter: drop-shadow(0 0 6px var(--chakra-color-crown));
 }
 
 .chakra-svg-stone:hover {
