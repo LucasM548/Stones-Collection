@@ -164,11 +164,6 @@ h1 {
   box-shadow: 0 0 15px #ff77ff, 0 0 25px #ff77ff;
 }
 
-.chakra-stone:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 25px currentColor, 0 0 40px currentColor; /* Utilise la couleur de fond pour l'ombre */
-}
-
 /* Panneau d'information */
 .info-panel {
   position: fixed; /* Fixe par rapport à la fenêtre */
@@ -564,7 +559,7 @@ h1 {
 }
 
 .chakra-svg-stone:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
   filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.8))
     drop-shadow(0 0 10px currentColor);
   fill-opacity: 1; /* Pleinement opaque au survol */
@@ -680,4 +675,59 @@ h1 {
   #add-stone-form button[type="submit"] {
     padding: 10px 15px;
   }
+}
+
+/* Styles pour les boutons d'action sur les pierres */
+.stone-buttons {
+  display: flex;
+  flex-direction: column; /* Aligner les boutons verticalement */
+  gap: 5px; /* Espace entre les boutons */
+  margin-left: 10px; /* Espace entre les infos et les boutons */
+}
+
+.stone-buttons button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  line-height: 1;
+  border-radius: 4px; /* Coins légèrement arrondis */
+  transition: background-color 0.2s ease;
+}
+
+.edit-stone-btn {
+  color: #f0ad4e; /* Orange pour modifier */
+}
+
+.edit-stone-btn:hover {
+  background-color: rgba(240, 173, 78, 0.2); /* Léger fond orange au survol */
+}
+
+.delete-stone-btn {
+  color: #d9534f; /* Rouge pour supprimer */
+}
+
+.delete-stone-btn:hover {
+  background-color: rgba(217, 83, 79, 0.2); /* Léger fond rouge au survol */
+}
+
+/* Ajustement pour aligner correctement les infos et les boutons */
+#stone-list li {
+  display: flex;
+  justify-content: space-between; /* Pousse les boutons vers la droite */
+  align-items: center; /* Centre verticalement */
+  padding: 10px 0;
+  border-bottom: 1px solid #eee; 
+}
+
+#stone-list li:last-child {
+  border-bottom: none;
+}
+
+.stone-info {
+  display: flex;
+  align-items: center; 
+  gap: 10px; /* Espace entre image et texte */
+  flex-grow: 1; /* Permet aux infos de prendre l'espace disponible */
 }
