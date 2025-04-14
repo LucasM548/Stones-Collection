@@ -5,8 +5,8 @@
   --chakra-color-solar-plexus: #ffdd4d;
   --chakra-color-heart: #77dd77;
   --chakra-color-throat: #77b5fe;
-  --chakra-color-third-eye: #8c4dff; /* Basé sur la couleur fill du SVG */
-  --chakra-color-crown: #ff77ff;
+  --chakra-color-third-eye: #4645d7; /* Basé sur la couleur fill du SVG */
+  --chakra-color-crown: #8750f6;
 }
 
 /* Classes pour appliquer les couleurs au texte */
