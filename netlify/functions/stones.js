@@ -1,19 +1,4 @@
-// Fichier: netlify/functions/stones.js
-
 const { MongoClient, ObjectId } = require('mongodb');
-
-// --- Configuration CORS ---
-// Remplace 'https://lucasm548.github.io' par '*' si tu veux autoriser n'importe quel domaine (plus simple pour tester, moins sécurisé)
-// Ou par l'URL de ton site Netlify final une fois la migration terminée.
-const allowedOrigin = '*'; // <= Autorise GitHub Pages pour la migration
-
-const corsHeaders = {
-    'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-};
-// --- Fin Configuration CORS ---
-
 
 const MONGODB_URI = process.env.MONGODB_URI;
 let DB_NAME;
