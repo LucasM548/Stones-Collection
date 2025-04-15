@@ -689,7 +689,7 @@ h1 {
   justify-content: space-between; /* Pousse les boutons vers la droite */
   align-items: center; /* Centre verticalement */
   padding: 10px 0;
-  border-bottom: 1px solid #eee; 
+  border-bottom: 1px solid #eee;
 }
 
 #stone-list li:last-child {
@@ -698,7 +698,111 @@ h1 {
 
 .stone-info {
   display: flex;
-  align-items: center; 
+  align-items: center;
   gap: 10px; /* Espace entre image et texte */
   flex-grow: 1; /* Permet aux infos de prendre l'espace disponible */
+}
+
+.drop-zone-prompt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.image-preview {
+    display: none; /* Caché par défaut */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover; /* Ajuste l'image pour remplir la zone */
+    position: relative; /* Pour être au-dessus du texte */
+    z-index: 2;
+}
+
+.remove-image-btn:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+/* Styles pour la zone de dépôt d'image */
+.image-upload-container {
+  position: relative; /* Pour positionner le bouton de suppression */
+  margin-top: 10px;
+}
+
+.image-drop-zone {
+  border: 2px dashed #8c4dff; /* Bordure initiale */
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  display: block; /* Pour que le label prenne toute la largeur */
+  position: relative; /* Pour l'aperçu */
+  min-height: 100px; /* Hauteur minimale */
+  display: flex; /* Pour centrer le contenu */
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; /* Mettre l'image en dessous du texte */
+}
+
+.image-drop-zone:hover {
+  background-color: rgba(140, 77, 255, 0.1); /* Léger fond violet au survol */
+  border-color: #a36eff; /* Bordure légèrement plus claire */
+}
+
+.drop-zone-prompt {
+  color: #8c4dff; /* Couleur du texte d'invite */
+  margin-bottom: 10px; /* Espace avant l'aperçu */
+  transition: opacity 0.3s ease;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 150px; /* Limite la hauteur de l'aperçu */
+  display: none; /* Caché par défaut */
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
+/* Styles quand une image est chargée (classe ajoutée par JS) */
+.image-drop-zone.has-image {
+  border: 2px solid transparent; /* Masque la bordure */
+  padding: 0; /* Enlève le padding pour que l'image prenne la place */
+  min-height: 0; /* Ajuste la hauteur minimale */
+}
+
+.image-drop-zone.has-image:hover {
+  background-color: transparent; /* Pas d'effet de fond au survol */
+}
+
+.image-drop-zone.has-image .drop-zone-prompt {
+  display: none; /* Masque le texte d'invite */
+}
+
+.image-drop-zone.has-image .image-preview {
+  display: block; /* Affiche l'aperçu */
+  margin: 0; /* Enlève la marge quand seule l'image est visible */
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  line-height: 18px; /* Ajuste pour centrer le 'x' */
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.remove-image-btn:hover {
+  background-color: rgba(255, 77, 77, 0.8); /* Rouge au survol */
 }
