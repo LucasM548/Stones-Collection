@@ -1,0 +1,21 @@
+{
+	"geolocation": {
+		"data": {
+			"city": "Jarny",
+			"country": {
+				"code": "FR",
+				"name": "France"
+			},
+			"subdivision": {
+				"code": "GES",
+				"name": "Grand Est"
+			},
+			"timezone": "Europe/Paris",
+			"latitude": 49.1597,
+			"longitude": 5.8644,
+			"postalCode": "54800"
+		},
+		"timestamp": 1744731525446
+	},
+	"siteId": "207787d2-07c0-482e-a01e-8eac1d829aa9"
+}
