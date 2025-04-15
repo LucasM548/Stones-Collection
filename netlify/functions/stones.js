@@ -1,3 +1,5 @@
+// Fichier: netlify/functions/stones.js
+
 const { MongoClient, ObjectId } = require('mongodb');
 
 const MONGODB_URI = process.env.MONGODB_URI;
