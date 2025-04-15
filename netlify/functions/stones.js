@@ -1,21 +1,19 @@
 // Fichier: netlify/functions/stones.js
 
 const { MongoClient, ObjectId } = require('mongodb');
+
+// --- Configuration CORS ---
+// Remplace 'https://lucasm548.github.io' par '*' si tu veux autoriser n'importe quel domaine (plus simple pour tester, moins sécurisé)
+// Ou par l'URL de ton site Netlify final une fois la migration terminée.
+const allowedOrigin = '*'; // <= Autorise GitHub Pages pour la migration
+
 const corsHeaders = {
-  // IMPORTANT : Pour la migration depuis GitHub Pages, utilise ton URL GitHub Pages.
-  // Pour une utilisation générale plus tard depuis ton site Netlify, tu pourrais vouloir
-  // utiliser '*' (moins sécurisé) ou l'URL de ton site Netlify, ou les deux.
-  // Pour l'instant, autorisons GitHub Pages :
-  'Access-Control-Allow-Origin': 'https://lucasm548.github.io/Stones-Collection/',
-  // Alternative TEMPORAIRE (plus simple mais moins sécurisée) si tu as des soucis :
-  // 'Access-Control-Allow-Origin': '*',
-
-  // Méthodes HTTP autorisées par ton API
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-
-  // En-têtes que le client (navigateur) est autorisé à envoyer
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization' // Ajouté Authorization au cas où
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
 };
+// --- Fin Configuration CORS ---
+
 
 const MONGODB_URI = process.env.MONGODB_URI;
 let DB_NAME;
@@ -54,8 +52,27 @@ async function connectToDatabase() { // Database connection logic
 }
 
 exports.handler = async (event, context) => { // Main handler
+
+    // --- Gestion de la requête Preflight OPTIONS ---
+    if (event.httpMethod === 'OPTIONS') {
+        console.log("Received OPTIONS preflight request");
+        return {
+            statusCode: 204, // No Content
+            headers: corsHeaders, // Envoyer les en-têtes CORS
+            body: ''
+        };
+    }
+    // --- Fin Gestion OPTIONS ---
+
+
     context.callbackWaitsForEmptyEventLoop = false;
-    if (!MONGODB_URI || !DB_NAME) { /* Config check */ return { statusCode: 500, body: JSON.stringify({ error: 'Server configuration error.' })}; }
+    if (!MONGODB_URI || !DB_NAME) { /* Config check */
+        return {
+            statusCode: 500,
+            headers: corsHeaders, // Ajouter CORS aux erreurs aussi
+            body: JSON.stringify({ error: 'Server configuration error.' })
+        };
+    }
 
     try {
         const db = await connectToDatabase();
@@ -64,14 +81,22 @@ exports.handler = async (event, context) => { // Main handler
         const stoneId = pathParts.length === 4 ? pathParts[3] : null;
         console.log(`Request Path: ${event.path}, Method: ${event.httpMethod}, Extracted stoneId: ${stoneId}`);
 
+        let response; // Pour stocker la réponse avant d'ajouter les headers
+
         switch (event.httpMethod) {
             case 'GET':
                 if (stoneId) { // Get single stone
-                    if (!ObjectId.isValid(stoneId)) return { statusCode: 400, body: JSON.stringify({ error: 'Invalid stone ID format' }) };
-                    const stone = await collection.findOne({ _id: new ObjectId(stoneId) });
-                    if (!stone) return { statusCode: 404, body: JSON.stringify({ error: 'Stone not found' }) };
-                    stone.id = stone._id.toString(); delete stone._id;
-                    return { statusCode: 200, body: JSON.stringify(stone) };
+                    if (!ObjectId.isValid(stoneId)) {
+                        response = { statusCode: 400, body: JSON.stringify({ error: 'Invalid stone ID format' }) };
+                    } else {
+                        const stone = await collection.findOne({ _id: new ObjectId(stoneId) });
+                        if (!stone) {
+                           response = { statusCode: 404, body: JSON.stringify({ error: 'Stone not found' }) };
+                        } else {
+                            stone.id = stone._id.toString(); delete stone._id;
+                            response = { statusCode: 200, body: JSON.stringify(stone) };
+                        }
+                    }
                 } else { // Get all stones
                     const allStonesArray = await collection.find({}).toArray();
                     const stonesGroupedByChakra = allStonesArray.reduce((acc, stone) => {
@@ -81,55 +106,76 @@ exports.handler = async (event, context) => { // Main handler
                         acc[chakraId].push(stone);
                         return acc;
                     }, {});
-                    return { statusCode: 200, body: JSON.stringify(stonesGroupedByChakra) };
+                    response = { statusCode: 200, body: JSON.stringify(stonesGroupedByChakra) };
                 }
+                break; // Sortir du switch pour ajouter les headers
 
             case 'POST': // Add new stone
                 let newStoneData;
                 try { newStoneData = JSON.parse(event.body); }
-                catch (e) { return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON in request body' }) }; }
-                if (!newStoneData.name || !newStoneData.virtues || !newStoneData.chakraId) return { statusCode: 400, body: JSON.stringify({ error: 'Missing required fields (name, virtues, chakraId)' })};
+                catch (e) { response = { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON in request body' }) }; break; }
+                if (!newStoneData.name || !newStoneData.virtues || !newStoneData.chakraId) { response = { statusCode: 400, body: JSON.stringify({ error: 'Missing required fields (name, virtues, chakraId)' })}; break; }
 
-                // *** MODIFICATION ICI (POST) ***
                 const dataToInsert = { ...newStoneData };
                 if ('id' in dataToInsert) delete dataToInsert.id;
                 if ('_id' in dataToInsert) delete dataToInsert._id;
 
                 const resultPost = await collection.insertOne(dataToInsert);
                 const createdStone = { ...dataToInsert, id: resultPost.insertedId.toString() };
-                return { statusCode: 201, body: JSON.stringify(createdStone) };
+                response = { statusCode: 201, body: JSON.stringify(createdStone) };
+                break;
 
             case 'PUT': // Update existing stone
-                if (!stoneId) return { statusCode: 400, body: JSON.stringify({ error: 'Missing stone ID in path for PUT request' }) };
-                if (!ObjectId.isValid(stoneId)) return { statusCode: 400, body: JSON.stringify({ error: 'Invalid stone ID format' }) };
+                if (!stoneId) { response = { statusCode: 400, body: JSON.stringify({ error: 'Missing stone ID in path for PUT request' }) }; break; }
+                if (!ObjectId.isValid(stoneId)) { response = { statusCode: 400, body: JSON.stringify({ error: 'Invalid stone ID format' }) }; break; }
                 let updatedStoneData;
                 try { updatedStoneData = JSON.parse(event.body); }
-                catch (e) { return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON in request body' }) }; }
+                catch (e) { response = { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON in request body' }) }; break; }
 
-                // *** MODIFICATION ICI (PUT) ***
                 const dataToUpdate = { ...updatedStoneData };
                 if ('id' in dataToUpdate) delete dataToUpdate.id;
                 if ('_id' in dataToUpdate) delete dataToUpdate._id;
 
                 const resultPut = await collection.updateOne({ _id: new ObjectId(stoneId) }, { $set: dataToUpdate });
-                if (resultPut.matchedCount === 0) return { statusCode: 404, body: JSON.stringify({ error: 'Stone not found for update' }) };
+                if (resultPut.matchedCount === 0) { response = { statusCode: 404, body: JSON.stringify({ error: 'Stone not found for update' }) }; break; }
                 const updatedStone = { ...dataToUpdate, id: stoneId };
-                return { statusCode: 200, body: JSON.stringify(updatedStone) };
+                response = { statusCode: 200, body: JSON.stringify(updatedStone) };
+                break;
 
             case 'DELETE': // Delete stone
-                if (!stoneId) return { statusCode: 400, body: JSON.stringify({ error: 'Missing stone ID in path for DELETE request' }) };
-                if (!ObjectId.isValid(stoneId)) return { statusCode: 400, body: JSON.stringify({ error: 'Invalid stone ID format' }) };
+                if (!stoneId) { response = { statusCode: 400, body: JSON.stringify({ error: 'Missing stone ID in path for DELETE request' }) }; break; }
+                if (!ObjectId.isValid(stoneId)) { response = { statusCode: 400, body: JSON.stringify({ error: 'Invalid stone ID format' }) }; break; }
                 await collection.deleteOne({ _id: new ObjectId(stoneId) });
-                return { statusCode: 204, body: '' };
+                response = { statusCode: 204, body: '' }; // No body needed for 204
+                break;
 
             default:
-                return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
+                response = { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
+                break;
         }
+
+        // Ajouter les headers CORS à la réponse finale (avant de retourner)
+        // S'assurer que les headers existants (comme Content-Type) ne sont pas écrasés si la réponse en a déjà
+        const finalHeaders = { ...corsHeaders };
+        if (response.body && response.statusCode !== 204) {
+            finalHeaders['Content-Type'] = 'application/json'; // Assurer Content-Type pour les réponses avec corps
+        }
+
+        return {
+             ...response, // Copier statusCode et body
+             headers: finalHeaders // Ajouter/remplacer les headers
+        };
+
     } catch (error) { // Catch all errors
         console.error('Unhandled error in Netlify function handler:', error);
         const isConfigError = error.message.includes("configuration") || error.message.includes("connection") || error.message.includes("Timeout");
         const statusCode = isConfigError ? 503 : 500;
         const errorMessage = isConfigError ? "Database connection error." : "Internal Server Error";
-        return { statusCode: statusCode, body: JSON.stringify({ error: errorMessage }) };
+        // Retourner l'erreur avec les headers CORS
+        return {
+            statusCode: statusCode,
+            headers: corsHeaders, // Ajouter CORS aux erreurs aussi
+            body: JSON.stringify({ error: errorMessage })
+        };
     }
 };
