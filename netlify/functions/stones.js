@@ -6,7 +6,7 @@ const corsHeaders = {
   // Pour une utilisation générale plus tard depuis ton site Netlify, tu pourrais vouloir
   // utiliser '*' (moins sécurisé) ou l'URL de ton site Netlify, ou les deux.
   // Pour l'instant, autorisons GitHub Pages :
-  'Access-Control-Allow-Origin': 'https://lucasm548.github.io',
+  'Access-Control-Allow-Origin': 'https://lucasm548.github.io/Stones-Collection/',
   // Alternative TEMPORAIRE (plus simple mais moins sécurisée) si tu as des soucis :
   // 'Access-Control-Allow-Origin': '*',
 
