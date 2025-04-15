@@ -642,7 +642,7 @@ h1 {
 .modal-content {
   background: var(--color-panel-bg); /* Réutilisation style panel */
   backdrop-filter: blur(5px);
-  padding: 30px 40px;
+  padding: 30px;
   border-radius: var(--border-radius-large); /* Cohérence */
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
   text-align: center;
@@ -755,6 +755,117 @@ h1 {
 }
 
 /* Mobile (max-width: 480px) */
+/* ===================== ADMIN LOGIN ICON & MODALS ===================== */
+#admin-login-icon {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  z-index: 1001;
+  cursor: pointer;
+  background: var(--color-panel-bg); /* Use theme variable */
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: background-color 0.2s, box-shadow 0.2s; /* Added background transition */
+}
+#admin-login-icon:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  background: var(--color-primary-action-hover); /* Use theme hover variable */
+}
+#admin-login-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.45);
+  justify-content: center;
+  align-items: center;
+}
+.modal.visible {
+  display: flex;
+}
+.modal-content { /* This style applies to the general modal, let's ensure admin login modal also uses theme variables */
+  /* Assuming admin modal uses this class, verify if specific ID #admin-login-modal exists */
+  background: var(--color-panel-bg); /* Use theme variable */
+  margin: auto;
+  padding: 30px 24px 24px 24px;
+  border-radius: var(--border-radius-large); /* Use theme variable */
+  box-shadow: 0 6px 32px rgba(0,0,0,0.18);
+  min-width: 260px;
+  max-width: 90vw;
+  text-align: center;
+  position: relative;
+  border: 1px solid var(--color-panel-border); /* Use theme variable */
+  color: var(--color-text-light); /* Use theme variable */
+}
+.close { /* Style for the close button within the admin modal context */
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--color-text-muted); /* Use theme variable */
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease; /* Added transform */
+}
+.close:hover {
+  color: var(--color-input-focus); /* Use theme focus color for hover */
+  transform: scale(1.1);
+}
+#admin-password-input {
+  width: calc(100% - 20px); /* Adjust for padding */
+  padding: 12px;
+  margin: 16px 0 8px 0;
+  border: 1px solid var(--color-input-border); /* Use theme variable */
+  border-radius: var(--border-radius-standard); /* Use theme variable */
+  font-size: 1.1em;
+  background-color: var(--color-input-bg); /* Use theme variable */
+  color: var(--color-text-light); /* Use theme variable */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+#admin-password-input:focus {
+  outline: none;
+  border-color: var(--color-input-focus);
+  box-shadow: 0 0 8px var(--color-input-focus);
+}
+
+#admin-login-btn, #admin-logout-btn { /* Logout button needs styling too */
+  padding: 12px 25px; /* Increased padding */
+  margin: 12px 0 0 0;
+  background: var(--color-primary-action); /* Use theme variable */
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-standard); /* Use theme variable */
+  font-size: 1em;
+  font-weight: 600; /* Added font-weight */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+#admin-login-btn:hover, #admin-logout-btn:hover {
+  background: var(--color-primary-action-hover); /* Use theme variable */
+}
+#admin-login-btn:active, #admin-logout-btn:active {
+  transform: scale(0.98);
+}
+
+.error-message { /* Style for error message in admin modal */
+  color: var(--color-warning); /* Use theme variable */
+  margin-top: 6px;
+  font-size: 0.98em;
+  min-height: 1.2em; /* Prevent layout jumps */
+}
+
 @media (max-width: 480px) {
   body {
     padding: 10px;

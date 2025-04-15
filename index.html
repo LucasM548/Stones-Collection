@@ -9,6 +9,29 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body>
+    <!-- Icône de connexion admin/invité -->
+    <div id="admin-login-icon" title="Connexion admin/invité">
+      <img id="admin-login-img" src="images/guest.png" alt="Connexion" />
+    </div>
+    <!-- Modale de connexion admin -->
+    <div id="admin-login-modal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span id="close-login-modal" class="close">&times;</span>
+        <h2>Connexion administrateur</h2>
+        <input type="password" id="admin-password-input" placeholder="Mot de passe admin" autocomplete="current-password" />
+        <button id="admin-login-btn">Se connecter</button>
+        <p id="admin-login-error" class="error-message" style="display:none;color:red;"></p>
+      </div>
+    </div>
+    <!-- Modale de déconnexion admin -->
+    <div id="admin-logout-modal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span id="close-logout-modal" class="close">&times;</span>
+        <h2>Déconnexion administrateur</h2>
+        <p>Voulez-vous quitter le mode administrateur ?</p>
+        <button id="admin-logout-btn">Se déconnecter</button>
+      </div>
+    </div>
     <div class="background-glow"></div>
     <div class="container">
       <h1>Harmonie des Chakras</h1>
