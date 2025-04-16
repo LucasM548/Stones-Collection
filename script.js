@@ -128,7 +128,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       allStonesData = loadedData; // Mettre à jour l'état global
-      console.log("Données stockées localement:", allStonesData);
 
       // Si un panneau est déjà ouvert, rafraîchir sa liste
       if (currentChakraId) {
@@ -934,7 +933,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   checkAdminSessionValidity();
   await loadInitialStones();
   // updateAdminUI(); // updateAdminUI est appelé dans checkAdminSessionValidity et potentiellement dans loadInitialStones->displayStones
-
-  console.log("Application initialisée.");
 
 }); // Fin de DOMContentLoaded
