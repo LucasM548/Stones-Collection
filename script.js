@@ -339,6 +339,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /** Affiche le panneau d'information pour un chakra donné */
   function showPanel(chakraId) {
+    // Remove .selected from all chakra circles
+    document.querySelectorAll('.chakra-svg-stone.selected').forEach(el => el.classList.remove('selected'));
+    // Add .selected to the clicked chakra
+    const clickedCircle = document.getElementById(chakraId);
+    if (clickedCircle) {
+      clickedCircle.classList.add('selected');
+    }
     currentChakraId = chakraId;
     const chakraData = CHAKRA_DETAILS[chakraId];
     const chakraNameSuffix = chakraId.replace('svg-', ''); // ex: 'root'
@@ -384,6 +391,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /** Cache le panneau d'information */
   function hidePanel() {
+    // Remove .selected from all chakra circles when closing the panel
+    document.querySelectorAll('.chakra-svg-stone.selected').forEach(el => el.classList.remove('selected'));
     infoPanel.classList.remove("visible");
     infoPanel.style.removeProperty('--active-chakra-color'); // Efface la variable de couleur active
     // Optionnel: supprimer la classe spécifique au chakra si elle était ajoutée

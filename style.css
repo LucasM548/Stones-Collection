@@ -170,9 +170,8 @@ h1 {
 
 .chakra-svg-stone {
   cursor: pointer;
-  fill-opacity: 0.85;
+  fill-opacity: 0.70;
   fill: var(--stone-color, #ccc); /* Use the variable, provide fallback */
-  filter: drop-shadow(0 0 6px var(--stone-color, transparent)); /* Use variable */
   transition:
     transform 0.18s cubic-bezier(.4,2,.6,1),
     box-shadow 0.18s,
@@ -181,12 +180,40 @@ h1 {
   position: absolute;
 }
 
+@keyframes chakra-glow-pulse {
+  from {
+    box-shadow: 0 0 0 12px var(--stone-color, 0.65), 0 0 32px 12px var(--stone-color, 0.55);
+    filter: drop-shadow(0 0 24px var(--stone-color, 0.65)) drop-shadow(0 0 12px var(--stone-color, 0.55));
+    fill-opacity: 0.70;
+  }
+  to {
+    box-shadow: 0 0 0 28px var(--stone-color, 1), 0 0 64px 28px var(--stone-color, 0.85);
+    filter: drop-shadow(0 0 48px var(--stone-color, 0.95)) drop-shadow(0 0 24px var(--stone-color, 0.85));
+    fill-opacity: 1;
+  }
+}
+
+.chakra-svg-stone.selected:hover,
+.chakra-svg-stone.selected:focus-visible {
+  /* Keep selected effect even when hovered/focused */
+  box-shadow: 0 0 0 6px var(--stone-color, 0.3), 0 0 16px 6px var(--stone-color, 0.25);
+  filter: drop-shadow(0 0 32px var(--stone-color)) drop-shadow(0 0 16px var(--stone-color));
+}
+
 .chakra-svg-stone:hover,
 .chakra-svg-stone:focus-visible {
   filter: drop-shadow(0 0 24px var(--stone-color)) drop-shadow(0 0 12px var(--stone-color));
   box-shadow: 0 0 0 4px rgba(0,0,0,0.10), 0 0 0 8px var(--stone-color);
-  fill-opacity: 1;
+  fill-opacity: 0.80;
 }
+
+.chakra-svg-stone.selected {
+  box-shadow: 0 0 0 6px var(--stone-color, 0.3), 0 0 16px 6px var(--stone-color, 0.25);
+  filter: drop-shadow(0 0 32px var(--stone-color)) drop-shadow(0 0 16px var(--stone-color));
+  animation: chakra-glow-pulse 0.4s cubic-bezier(.4,2,.6,1) infinite alternate;
+  z-index: 2;
+}
+
 
 .chakra-svg-stone:active {
   filter: brightness(0.95) drop-shadow(0 0 18px var(--stone-color));
