@@ -119,15 +119,6 @@ h1 {
   color: var(--color-text-muted);
 }
 
-/* Classes utilitaires pour couleur de texte des chakras */
-.text-color-root { color: var(--chakra-color-root); }
-.text-color-sacral { color: var(--chakra-color-sacral); }
-.text-color-solar-plexus { color: var(--chakra-color-solar-plexus); }
-.text-color-heart { color: var(--chakra-color-heart); }
-.text-color-throat { color: var(--chakra-color-throat); }
-.text-color-third-eye { color: var(--chakra-color-third-eye); }
-.text-color-crown { color: var(--chakra-color-crown); }
-
 /**
  * =============================================================================
  * REPRÉSENTATION DES CHAKRAS (Conteneur & Éléments)
