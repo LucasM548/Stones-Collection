@@ -515,6 +515,7 @@ h1 {
 #stone-list::-webkit-scrollbar-thumb { background-color: var(--color-primary-action); border-radius: 10px; }
 #stone-list::-webkit-scrollbar-thumb:hover { background-color: var(--color-primary-action-hover); }
 
+/* Inside #stone-list li rule */
 #stone-list li {
   display: flex;
   justify-content: space-between;
@@ -523,9 +524,21 @@ h1 {
   padding: 10px 15px; /* Padding ajusté */
   margin-bottom: 8px; /* Espace réduit entre items */
   border-radius: var(--border-radius-standard);
-  border-left: 4px solid var(--chakra-color-throat); /* Utilisation variable chakra */
-  transition: background-color 0.2s ease;
+  /* Remove the specific color here */
+  border-left: 4px solid transparent; /* Default to transparent or a base color */
+  transition: background-color 0.2s ease, border-left-color 0.2s ease; /* Add transition for border color */
 }
+
+/* Add rules for each chakra using the data attribute */
+#stone-list li[data-chakra="root"] { border-left-color: var(--chakra-color-root); }
+#stone-list li[data-chakra="sacral"] { border-left-color: var(--chakra-color-sacral); }
+#stone-list li[data-chakra="solar-plexus"] { border-left-color: var(--chakra-color-solar-plexus); }
+#stone-list li[data-chakra="heart"] { border-left-color: var(--chakra-color-heart); }
+#stone-list li[data-chakra="throat"] { border-left-color: var(--chakra-color-throat); }
+#stone-list li[data-chakra="third-eye"] { border-left-color: var(--chakra-color-third-eye); }
+#stone-list li[data-chakra="crown"] { border-left-color: var(--chakra-color-crown); }
+#stone-list li[data-chakra="secondary"] { border-left-color: var(--chakra-color-secondary); }
+
 
 #stone-list li:hover {
   background: rgba(0, 0, 0, 0.25); /* Effet léger au survol */

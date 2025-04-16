@@ -100,6 +100,222 @@ document.addEventListener("DOMContentLoaded", async () => {
   const closeLogoutModalBtn = document.getElementById("close-logout-modal");
   const adminLogoutBtn = document.getElementById("admin-logout-btn");
 
+  // Add this near your other constants
+const JEWELRY_TYPES = [
+  "Pierre brute",
+  "Pierre Roulée/Taillée",
+  "Collier",
+  "Bracelet",
+  "Bague",
+  "Pendentif",
+  "Boucles d'oreilles",
+  "Autre"
+];
+const DEFAULT_QUANTITY_PLACEHOLDER = '1'; // Placeholder when checked
+
+// ==========================================================================
+// FONCTIONS UI & FORMULAIRE (Add/Modify functions)
+// ==========================================================================
+
+/** Normalizes a string for use in attributes (e.g., replacing spaces/slashes) */
+function normalizeStringType(type) {
+  // Keep it simple: replace common separators with underscore
+  // Ensure it starts with a letter if necessary for some contexts, though names should be fine
+  return type.replace(/[\s\/']/g, '_');
+}
+
+/** Generates the HTML for jewelry type checkboxes and quantity inputs */
+function generateJewelryCheckboxes() {
+  jewelryCheckboxesContainer.innerHTML = ''; // Clear existing content
+
+  JEWELRY_TYPES.forEach(type => {
+      const normalizedType = normalizeStringType(type);
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'jewelry-type-item';
+
+      const label = document.createElement('label');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.name = 'jewelry-type';
+      checkbox.value = type;
+      // Add data-type attribute to checkbox for easier linking
+      checkbox.dataset.type = type;
+
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(` ${type}`)); // Add space before text
+
+      const quantityInput = document.createElement('input');
+      quantityInput.type = 'number';
+      // Use data-type attribute to link quantity input to its checkbox type
+      quantityInput.dataset.type = type;
+      // Use a consistent naming pattern if needed, but data-type is primary lookup
+      quantityInput.name = `quantity_${normalizedType}`;
+      quantityInput.min = '1';
+      quantityInput.disabled = true;
+      quantityInput.placeholder = ''; // Initially no placeholder
+
+      itemDiv.appendChild(label);
+      itemDiv.appendChild(quantityInput);
+      jewelryCheckboxesContainer.appendChild(itemDiv);
+  });
+  console.log("Jewelry checkboxes generated dynamically.");
+}
+
+// Modify existing functions to use data-type or iterate dynamically
+
+function resetJewelryCheckboxesAndQuantities() {
+  jewelryCheckboxesContainer.querySelectorAll('input[type="checkbox"][name="jewelry-type"]').forEach(checkbox => {
+      checkbox.checked = false;
+      const type = checkbox.dataset.type; // Use data-type
+      const quantityInput = jewelryCheckboxesContainer.querySelector(`input[type="number"][data-type="${type}"]`);
+      if (quantityInput) {
+          quantityInput.value = '';
+          quantityInput.placeholder = '';
+          quantityInput.disabled = true;
+      }
+  });
+}
+
+function populateEditForm(stoneData) {
+  // (Keep existing code for name, virtues, purification, recharge)
+  stoneNameInput.value = stoneData.name;
+  stoneVirtuesInput.value = stoneData.virtues;
+  stonePurificationInput.value = stoneData.purification || '';
+  stoneRechargeInput.value = stoneData.recharge || '';
+
+  resetJewelryCheckboxesAndQuantities(); // Start fresh
+
+  stoneData.jewelryTypes?.forEach(item => {
+      if (item && typeof item.type === 'string') {
+          // Find checkbox using data-type or value
+          const checkbox = jewelryCheckboxesContainer.querySelector(`input[type="checkbox"][data-type="${item.type}"]`);
+          if (checkbox) {
+              checkbox.checked = true;
+              // Find quantity input using data-type
+              const quantityInput = jewelryCheckboxesContainer.querySelector(`input[type="number"][data-type="${item.type}"]`);
+              if (quantityInput) {
+                  quantityInput.disabled = false;
+                  quantityInput.value = item.quantity > 1 ? item.quantity : ''; // Show value only if > 1
+                  quantityInput.placeholder = DEFAULT_QUANTITY_PLACEHOLDER; // Set placeholder '1' when checked
+              }
+          } else {
+              console.warn(`Checkbox non trouvée pour le type: ${item.type}`);
+          }
+      } else {
+          console.warn('Item de type de bijou malformé ignoré lors de la modification:', item);
+      }
+  });
+
+  // (Keep existing code for image, submit button text, flags)
+   if (stoneData.image && typeof stoneData.image === 'string' && stoneData.image.startsWith('data:image')) {
+     imagePreview.src = stoneData.image;
+     imagePreview.style.display = 'block';
+     imageDropZone.classList.add('has-image');
+     removeImageBtn.style.display = 'inline-block';
+     currentImageBase64 = stoneData.image;
+   } else {
+     resetImagePreview();
+   }
+
+   submitButton.textContent = 'Modifier la pierre';
+   isEditing = true;
+   editingStoneId = String(stoneData.id);
+
+   activateTab(addStoneTabBtn);
+   stoneNameInput.focus();
+}
+
+async function handleFormSubmit(event) {
+  event.preventDefault();
+  // (Keep isAdmin and currentChakraId checks)
+   if (!isAdmin) {
+       showToast("Action réservée aux administrateurs.", "error");
+       return;
+   }
+   if (!currentChakraId) {
+     showToast("Veuillez d'abord sélectionner un chakra.", "warning");
+     return;
+   }
+
+  const stoneName = stoneNameInput.value.trim();
+  const stoneVirtues = stoneVirtuesInput.value.trim();
+
+  // Use data-type attributes to gather selected types and quantities
+  const jewelryTypesWithQuantities = Array.from(
+      jewelryCheckboxesContainer.querySelectorAll('input[type="checkbox"][name="jewelry-type"]:checked')
+  ).map(checkbox => {
+      const type = checkbox.dataset.type; // Get type from data-attribute
+      const quantityInput = jewelryCheckboxesContainer.querySelector(`input[type="number"][data-type="${type}"]`);
+      let quantity = 1; // Default quantity is 1 if checked
+      if (quantityInput) {
+          const parsedValue = parseInt(quantityInput.value, 10);
+          // Use parsed value only if it's a number >= 1
+          if (!isNaN(parsedValue) && parsedValue >= 1) {
+              quantity = parsedValue;
+          }
+      }
+      return { type: type, quantity: quantity };
+  });
+
+  // (Keep the rest of the function: stoneDataForBackend, API call, update state, reset form)
+   const stoneDataForBackend = {
+       name: stoneName,
+       virtues: stoneVirtues,
+       purification: stonePurificationInput.value.trim() || null,
+       recharge: stoneRechargeInput.value.trim() || null,
+       jewelryTypes: jewelryTypesWithQuantities,
+       image: currentImageBase64,
+       ...(isEditing && { id: editingStoneId })
+   };
+
+   submitButton.disabled = true;
+   submitButton.textContent = isEditing ? 'Modification...' : 'Ajout...';
+
+   const savedStone = await addOrUpdateStoneBackend(currentChakraId, stoneDataForBackend);
+
+   submitButton.disabled = false;
+
+   if (savedStone && savedStone.id) {
+     if (!allStonesData[currentChakraId]) {
+       allStonesData[currentChakraId] = [];
+     }
+     const stoneIndex = allStonesData[currentChakraId].findIndex(s => String(s.id) === String(savedStone.id));
+
+     if (stoneIndex !== -1) { // Modification
+       allStonesData[currentChakraId][stoneIndex] = savedStone;
+       console.log("État local mis à jour (modification):", allStonesData);
+       updateStoneInDisplayList(currentChakraId, savedStone); // Pass chakraId
+     } else { // Ajout
+       allStonesData[currentChakraId].push(savedStone);
+       console.log("État local mis à jour (ajout):", allStonesData);
+       addStoneToDisplayList(currentChakraId, savedStone); // Pass chakraId
+     }
+
+     resetForm();
+     activateTab(document.querySelector('.tab-link[data-tab="tab-my-stones"]'));
+
+   } else {
+     console.error("La sauvegarde via le backend a échoué ou n'a pas retourné de données valides.");
+     submitButton.textContent = isEditing ? 'Modifier la pierre' : 'Ajouter la pierre';
+   }
+}
+
+// Update the change handler for checkboxes
+function handleJewelryCheckboxChange(checkbox) {
+  const type = checkbox.dataset.type; // Use data-type
+  const quantityInput = jewelryCheckboxesContainer.querySelector(`input[type="number"][data-type="${type}"]`);
+  if (quantityInput) {
+      quantityInput.disabled = !checkbox.checked;
+      if (checkbox.checked) {
+          quantityInput.value = ''; // Clear any previous value
+          quantityInput.placeholder = DEFAULT_QUANTITY_PLACEHOLDER; // Set placeholder to '1'
+      } else {
+          quantityInput.value = ''; // Clear value
+          quantityInput.placeholder = ''; // Clear placeholder
+      }
+  }
+}
+
   // ==========================================================================
   // ÉTAT DE L'APPLICATION
   // ==========================================================================
@@ -970,6 +1186,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   adminLogoutModal.style.display = 'none';
   stoneList.innerHTML = initialStoneListMessageHTML;
 
+  generateJewelryCheckboxes();
   createSVGCircles(); // Crée les cercles SVG au chargement
   checkAdminSessionValidity();
   await loadInitialStones();
