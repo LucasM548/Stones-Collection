@@ -12,6 +12,7 @@
   --chakra-color-throat: #77b5fe;
   --chakra-color-third-eye: #4645d7;
   --chakra-color-crown: #8750f6;
+  --chakra-color-secondary: #000000;
 
   /* Couleurs Générales */
   --color-text-light: #f0f0f0;
@@ -28,7 +29,7 @@
   --color-input-focus: #ff77ff; /* Proche de crown, mais gardé distinct */
   --color-primary-action: #8c4dff; /* Utilisé pour boutons, scrollbar, dropzone */
   --color-primary-action-hover: #a36eff;
-  --color-danger: var(--chakra-color-root); /* #ff4d4d */
+  --color-danger: var(--chakra-color-root);
   --color-danger-hover: #e60000;
   --color-secondary: #6c757d;
   --color-secondary-hover: #5a6268;
@@ -198,6 +199,8 @@ h1 {
 #svg-throat { fill: var(--chakra-color-throat); filter: drop-shadow(0 0 6px var(--chakra-color-throat)); }
 #svg-third-eye { fill: var(--chakra-color-third-eye); filter: drop-shadow(0 0 6px var(--chakra-color-third-eye)); }
 #svg-crown { fill: var(--chakra-color-crown); filter: drop-shadow(0 0 6px var(--chakra-color-crown)); }
+#svg-secondary { fill: var(--chakra-color-secondary); filter: drop-shadow(0 0 6px var(--chakra-color-secondary));
+}
 
 /**
  * =============================================================================
@@ -301,6 +304,7 @@ h1 {
 .info-panel.chakra-active-color-throat .tab-link.active { color: var(--chakra-color-throat); border-bottom-color: var(--chakra-color-throat); }
 .info-panel.chakra-active-color-third-eye .tab-link.active { color: var(--chakra-color-third-eye); border-bottom-color: var(--chakra-color-third-eye); }
 .info-panel.chakra-active-color-crown .tab-link.active { color: var(--chakra-color-crown); border-bottom-color: var(--chakra-color-crown); }
+.info-panel.chakra-active-color-secondary .tab-link.active { color: var(--chakra-color-secondary); border-bottom-color: var(--chakra-color-secondary); }
 
 /* Contenu des onglets */
 .tab-content {

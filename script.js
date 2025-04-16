@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ==========================================================================
   // CONSTANTES ET CONFIGURATION
   // ==========================================================================
-  const CHAKRA_NAMES = ["root", "sacral", "solar-plexus", "heart", "throat", "third-eye", "crown"];
+  const CHAKRA_NAMES = ["root", "sacral", "solar-plexus", "heart", "throat", "third-eye", "crown", "secondary"];
   const IMAGE_MAX_WIDTH = 800;
   const IMAGE_MAX_HEIGHT = 800;
   const IMAGE_JPEG_QUALITY = 0.7;
@@ -20,7 +20,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     "svg-heart": { nom: "Cœur (Anahata)", couleur: "Vert", element: "Air", description: "Amour, compassion, relations. Pont entre les chakras inférieurs et supérieurs." },
     "svg-throat": { nom: "Gorge (Vishuddha)", couleur: "Bleu clair", element: "Éther/Espace", description: "Communication, expression de soi, vérité. Capacité à exprimer nos pensées et sentiments." },
     "svg-third-eye": { nom: "Troisième Œil (Ajna)", couleur: "Indigo", element: "Lumière", description: "Intuition, clairvoyance, sagesse. Centre de notre perception au-delà du monde matériel." },
-    "svg-crown": { nom: "Couronne (Sahasrara)", couleur: "Violet / Blanc", element: "Conscience", description: "Spiritualité, connexion au divin, illumination. Porte vers la conscience universelle." }
+    "svg-crown": { nom: "Couronne (Sahasrara)", couleur: "Violet / Blanc", element: "Conscience", description: "Spiritualité, connexion au divin, illumination. Porte vers la conscience universelle." },
+    "svg-secondary": { nom: "Mains et Pieds", couleur: "Noir", element: "Éther/Terre", description: "Connexion à la Terre, Action, Manifestation. Ancrage profond, capacité d'action, manifestation aisée." }
   };
 
   // ==========================================================================
@@ -33,8 +34,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tabs = document.querySelectorAll(".tab-link");
   const tabContents = document.querySelectorAll(".tab-content");
   const generalInfoTabContent = document.getElementById("tab-general");
-  const myStonesTabContent = document.getElementById("tab-my-stones");
-  const addStoneTabContent = document.getElementById("tab-add-stone"); // Content div
   const addStoneTabBtn = document.querySelector('.tab-link[data-tab="tab-add-stone"]'); // Tab button
   const stoneList = document.getElementById("stone-list");
   const addStoneForm = document.getElementById("add-stone-form");
