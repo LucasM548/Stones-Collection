@@ -496,7 +496,7 @@ h1 {
   list-style: none;
   padding: 0;
   text-align: left;
-  max-height: 250px; /* Légèrement plus de hauteur */
+  max-height: 80%; /* Hauteur de la liste */
   overflow-y: auto;
   margin-top: 20px; /* Espace au-dessus de la liste */
 
