@@ -177,29 +177,28 @@ h1 {
   height: auto;
 }
 
-/* Style commun pour les pierres dans le SVG */
 .chakra-svg-stone {
   cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease, fill-opacity 0.3s ease;
   fill-opacity: 0.85;
-  /* Les fill et filter sont spécifiques ci-dessous */
+  fill: var(--stone-color, #ccc); /* Use the variable, provide fallback */
+  filter: drop-shadow(0 0 6px var(--stone-color, transparent)); /* Use variable */
+  transition:
+    transform 0.18s cubic-bezier(.4,2,.6,1),
+    box-shadow 0.18s,
+    filter 0.18s,
+    outline 0.18s;
+  position: absolute;
 }
 
-.chakra-svg-stone:hover {
-  transform: scale(1.02);
-  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 10px currentColor);
+.chakra-svg-stone:hover,
+.chakra-svg-stone:focus-visible {
+  filter: drop-shadow(0 0 24px var(--stone-color)) drop-shadow(0 0 12px var(--stone-color));
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.10), 0 0 0 8px var(--stone-color);
   fill-opacity: 1;
 }
 
-/* Styles spécifiques par ID pour les pierres SVG */
-#svg-root { fill: var(--chakra-color-root); filter: drop-shadow(0 0 6px var(--chakra-color-root)); }
-#svg-sacral { fill: var(--chakra-color-sacral); filter: drop-shadow(0 0 6px var(--chakra-color-sacral)); }
-#svg-solar-plexus { fill: var(--chakra-color-solar-plexus); filter: drop-shadow(0 0 6px var(--chakra-color-solar-plexus)); }
-#svg-heart { fill: var(--chakra-color-heart); filter: drop-shadow(0 0 6px var(--chakra-color-heart)); }
-#svg-throat { fill: var(--chakra-color-throat); filter: drop-shadow(0 0 6px var(--chakra-color-throat)); }
-#svg-third-eye { fill: var(--chakra-color-third-eye); filter: drop-shadow(0 0 6px var(--chakra-color-third-eye)); }
-#svg-crown { fill: var(--chakra-color-crown); filter: drop-shadow(0 0 6px var(--chakra-color-crown)); }
-#svg-secondary { fill: var(--chakra-color-secondary); filter: drop-shadow(0 0 6px var(--chakra-color-secondary));
+.chakra-svg-stone:active {
+  filter: brightness(0.95) drop-shadow(0 0 18px var(--stone-color));
 }
 
 /**
@@ -281,30 +280,20 @@ h1 {
   border: none;
   color: var(--color-text-muted);
   font-size: 1em;
-  transition: color 0.3s ease, border-bottom-color 0.3s ease; /* Transition sur border-bottom-color */
+  transition: color 0.3s ease, border-bottom-color 0.3s ease;
   border-bottom: 3px solid transparent;
-  margin-bottom: -1px; /* Alignement avec la bordure du conteneur */
+  margin-bottom: -1px;
 }
 
 .tab-link:hover {
-  color: var(--color-text-light); /* Utilisation de la variable */
+  color: var(--color-text-light);
 }
 
 .tab-link.active {
-  color: var(--color-text-light); /* Couleur par défaut onglet actif */
-  border-bottom-color: var(--color-text-light); /* Bordure par défaut */
-  /* La couleur spécifique au chakra est appliquée via les classes ci-dessous */
+  color: var(--active-chakra-color, var(--color-text-light)); /* Use panel variable, fallback to default */
+  border-bottom-color: var(--active-chakra-color, var(--color-text-light)); /* Use panel variable, fallback */
+  /* Keep other base .tab-link.active styles if any (like font-weight) */
 }
-
-/* Application dynamique couleur chakra à l'onglet actif */
-.info-panel.chakra-active-color-root .tab-link.active { color: var(--chakra-color-root); border-bottom-color: var(--chakra-color-root); }
-.info-panel.chakra-active-color-sacral .tab-link.active { color: var(--chakra-color-sacral); border-bottom-color: var(--chakra-color-sacral); }
-.info-panel.chakra-active-color-solar-plexus .tab-link.active { color: var(--chakra-color-solar-plexus); border-bottom-color: var(--chakra-color-solar-plexus); }
-.info-panel.chakra-active-color-heart .tab-link.active { color: var(--chakra-color-heart); border-bottom-color: var(--chakra-color-heart); }
-.info-panel.chakra-active-color-throat .tab-link.active { color: var(--chakra-color-throat); border-bottom-color: var(--chakra-color-throat); }
-.info-panel.chakra-active-color-third-eye .tab-link.active { color: var(--chakra-color-third-eye); border-bottom-color: var(--chakra-color-third-eye); }
-.info-panel.chakra-active-color-crown .tab-link.active { color: var(--chakra-color-crown); border-bottom-color: var(--chakra-color-crown); }
-.info-panel.chakra-active-color-secondary .tab-link.active { color: var(--chakra-color-secondary); border-bottom-color: var(--chakra-color-secondary); }
 
 /* Contenu des onglets */
 .tab-content {
