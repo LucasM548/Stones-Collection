@@ -24,10 +24,47 @@ document.addEventListener("DOMContentLoaded", async () => {
     "svg-secondary": { nom: "Mains et Pieds", couleur: "Noir", element: "Éther/Terre", description: "Connexion à la Terre, Action, Manifestation. Ancrage profond, capacité d'action, manifestation aisée." }
   };
 
+  // --- Données pour la génération dynamique des cercles SVG ---
+  const chakraCirclesData = [
+    { id: "svg-crown", name: "Couronne (Sahasrara)", cy: 235 },
+    { id: "svg-third-eye", name: "Troisième Œil (Ajna)", cy: 373 },
+    { id: "svg-throat", name: "Gorge (Vishuddha)", cy: 510 },
+    { id: "svg-heart", name: "Cœur (Anahata)", cy: 665 },
+    { id: "svg-solar-plexus", name: "Plexus Solaire (Manipura)", cy: 819 },
+    { id: "svg-sacral", name: "Sacré (Swadhisthana)", cy: 977 },
+    { id: "svg-root", name: "Racine (Muladhara)", cy: 1135 },
+    { id: "svg-secondary", name: "Mains et Pieds", cy: 1290 }
+  ];
+
+  const commonCircleAttrs = {
+      cx: "500",
+      r: "40",
+      class: "chakra-svg-stone"
+  };
+  const svgNS = "http://www.w3.org/2000/svg";
+  // ------------------------------------------------------------
+
+  // ==========================================================================
+  // GÉNÉRATION DYNAMIQUE DES CERCLES SVG
+  // ==========================================================================
+  function createSVGCircles() {
+    chakraCirclesData.forEach(chakra => {
+      const circle = document.createElementNS(svgNS, "circle");
+      circle.setAttributeNS(null, "id", chakra.id);
+      circle.setAttributeNS(null, "class", commonCircleAttrs.class);
+      circle.setAttributeNS(null, "data-chakra-name", chakra.name);
+      circle.setAttributeNS(null, "cx", commonCircleAttrs.cx);
+      circle.setAttributeNS(null, "cy", chakra.cy.toString());
+      circle.setAttributeNS(null, "r", commonCircleAttrs.r);
+      svgElement.appendChild(circle);
+    });
+    console.log("Cercles SVG des chakras créés dynamiquement.");
+  }
+
   // ==========================================================================
   // SÉLECTION DES ÉLÉMENTS DU DOM
   // ==========================================================================
-  const chakraStonesElements = document.querySelectorAll(".chakra-svg-stone");
+  const svgElement = document.getElementById("chakra-svg"); // Ajout pour la génération et la délégation
   const infoPanel = document.getElementById("info-panel");
   const panelChakraName = document.getElementById("panel-chakra-name");
   const closePanelButton = document.getElementById("close-panel");
@@ -752,14 +789,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ÉCOUTEURS D'ÉVÉNEMENTS PRINCIPAUX
   // ==========================================================================
 
-  // --- Clic sur les pierres chakra SVG ---
-  chakraStonesElements.forEach((stone) => {
-    stone.addEventListener("click", () => {
-      showPanel(stone.id);
-    });
+  // --- Clics sur les pierres chakra (utilisant la délégation d'événements) ---
+  svgElement.addEventListener("click", (event) => {
+    const target = event.target;
+    // Vérifie si l'élément cliqué est bien un cercle chakra
+    if (target.matches(".chakra-svg-stone")) {
+        const chakraId = target.id;
+        console.log(`Cercle Chakra cliqué : ${chakraId}`);
+        showPanel(chakraId);
+    }
   });
 
-  // --- Fermeture du panneau ---
+  // --- Clic sur le bouton de fermeture du panneau ---
   closePanelButton.addEventListener("click", hidePanel);
 
   // --- Navigation par onglets ---
@@ -929,6 +970,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   adminLogoutModal.style.display = 'none';
   stoneList.innerHTML = initialStoneListMessageHTML;
 
+  createSVGCircles(); // Crée les cercles SVG au chargement
   checkAdminSessionValidity();
   await loadInitialStones();
   // updateAdminUI(); // updateAdminUI est appelé dans checkAdminSessionValidity et potentiellement dans loadInitialStones->displayStones
