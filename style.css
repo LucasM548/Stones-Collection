@@ -912,3 +912,74 @@ h1 {
   .modal-buttons { gap: 10px; }
   .modal-buttons button { padding: 8px 20px; font-size: 0.9em; }
 }
+
+/* Styles pour les groupes de cases à cocher */
+.checkbox-group {
+  display: flex;
+  flex-direction: column; /* Organise les paires label/input verticalement */
+  gap: 5px; /* Espace entre les lignes de type de bijou */
+}
+
+.jewelry-type-item {
+  display: flex;
+  align-items: center; /* Alignement vertical */
+  gap: 10px; /* Espace entre le label et l'input numérique */
+}
+
+.jewelry-type-item label {
+  flex-grow: 1; /* Permet au label de prendre l'espace disponible */
+  display: flex; /* Pour aligner la checkbox avec le texte du label */
+  align-items: center;
+  gap: 5px;
+}
+
+/* Style spécifique pour les inputs numériques de quantité */
+.jewelry-type-item input[type="number"] {
+  width: 55px; /* Largeur ajustée */
+  padding: 6px 8px; /* Harmoniser avec les autres inputs */
+  border: 1px solid var(--color-input-border); /* Utiliser la variable de couleur de bordure */
+  border-radius: var(--border-radius-standard); /* Utiliser la variable de rayon de bordure */
+  font-size: 0.9em;
+  text-align: center;
+  background-color: var(--color-input-bg); /* Utiliser la variable de couleur de fond */
+  color: var(--color-text-light); /* Utiliser la variable de couleur de texte */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Ombre interne subtile */
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  appearance: none; /* Propriété standard */
+}
+
+.jewelry-type-item input[type="number"]:focus {
+  border-color: var(--color-input-focus);
+  box-shadow: 0 0 8px var(--color-input-focus);
+  outline: none;
+}
+
+.jewelry-type-item input[type="number"]:disabled {
+  background-color: var(--color-input-bg); /* Utiliser la variable de fond désactivé */
+  border-color: var(--color-input-border);
+  color: var(--color-text-muted); /* Couleur de texte atténuée */
+  cursor: not-allowed;
+  box-shadow: none; /* Pas d'ombre quand désactivé */
+}
+
+/* Masquer les flèches pour les navigateurs Webkit/Blink (Chrome, Safari, Edge, Opera) */
+.jewelry-type-item input[type="number"]::-webkit-outer-spin-button,
+.jewelry-type-item input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Masquer les flèches pour Firefox */
+.jewelry-type-item input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: none; /* Propriété standard */
+}
+
+/* Style pour les images dans la liste des pierres */
+.stone-list-image {
+  width: 50px; /* Taille fixe pour l'image */
+  height: 50px;
+  border-radius: var(--border-radius-standard);
+  object-fit: cover;
+  flex-shrink: 0; /* Empêche l'image de rétrécir */
+}

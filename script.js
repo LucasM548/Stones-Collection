@@ -251,7 +251,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function generateStoneListItemHTML(stoneData) {
       // Assurer que stoneData.id est bien une string pour l'attribut data-stone-id
       const stoneIdString = String(stoneData.id);
-      const jewelryDisplay = stoneData.jewelryTypes?.length > 0 ? stoneData.jewelryTypes.join(', ') : 'Non spécifié';
+      const jewelryDisplay = stoneData.jewelryTypes?.map(item => `${item.type}${item.quantity > 1 ? ` (x${item.quantity})` : ''}`).join(', ') || 'Non spécifié';
       const purificationDisplay = stoneData.purification || 'Non spécifié';
       const rechargeDisplay = stoneData.recharge || 'Non spécifié';
       // Vérifie si l'image est une chaîne base64 valide ou une URL
@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <em>Vertus:</em> ${escapeHTML(stoneData.virtues)}<br>
             <em>Purification:</em> ${escapeHTML(purificationDisplay)}<br>
             <em>Rechargement:</em> ${escapeHTML(rechargeDisplay)}<br>
-            <em>Type(s) de bijou:</em> ${escapeHTML(jewelryDisplay)}
+            <em>Type(s) de bijou(x):</em> ${escapeHTML(jewelryDisplay)}
           </div>
         </div>
         <div class="stone-buttons">
@@ -338,6 +338,67 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Supprimé: deleteStoneData (remplacé par deleteStoneBackend)
 
   // ==========================================================================
+  // FONCTIONS D'INTERACTION AVEC L'API BACKEND (NOUVEAU)
+  // ==========================================================================
+
+  // Fonction de migration
+  function migrateJewelryTypes(stonesData) {
+    let dataWasMigrated = false;
+    for (const chakraId in stonesData) {
+      if (Array.isArray(stonesData[chakraId])) {
+        stonesData[chakraId] = stonesData[chakraId].map(stone => {
+          // Vérifier si la migration est nécessaire
+          if (Array.isArray(stone.jewelryTypes) && stone.jewelryTypes.length > 0 && typeof stone.jewelryTypes[0] === 'string') {
+            console.log(`Migration des jewelryTypes pour la pierre ID ${stone.id} (Chakra: ${chakraId})`);
+            stone.jewelryTypes = stone.jewelryTypes.map(typeString => ({
+              type: typeString,
+              quantity: 1
+            }));
+            dataWasMigrated = true;
+          }
+          // Assurer que l'ID est une string
+          if (stone.id !== undefined && typeof stone.id !== 'string') {
+             stone.id = String(stone.id);
+          }
+
+          return stone;
+        });
+      }
+    }
+    return dataWasMigrated;
+  }
+
+  // Charger les données initiales
+  async function loadInitialStones() {
+    console.log("Chargement des données initiales depuis le backend...");
+    try {
+      const response = await fetch(".netlify/functions/stones"); // Appel GET
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP! status: ${response.status}`);
+      }
+      allStonesData = await response.json();
+      console.log("Données chargées:", allStonesData);
+
+      // Migration des données
+      const migrated = migrateJewelryTypes(allStonesData);
+      if (migrated) {
+        console.log("Données migrées, sauvegarde dans localStorage.");
+        // Sauvegarder les données migrées
+        localStorage.setItem('stonesData', JSON.stringify(allStonesData));
+      }
+
+      // Si un panneau est déjà ouvert, rafraîchir sa liste
+      if (currentChakraId) {
+        displayStonesForChakra(currentChakraId);
+      }
+    } catch (error) {
+      console.error("Erreur lors du chargement initial des pierres:", error);
+      alert("Impossible de charger les données des pierres. Vérifiez votre connexion ou réessayez plus tard.");
+      allStonesData = {}; // Assurer un état vide en cas d'erreur
+    }
+  }
+
+  // ==========================================================================
   // GESTION DU FORMULAIRE (peu de changements, sauf submit)
   // ==========================================================================
 
@@ -349,7 +410,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     stoneRechargeInput.value = stoneData.recharge || '';
 
     jewelryCheckboxesContainer.querySelectorAll('input[name="jewelry-type"]').forEach(checkbox => {
-      checkbox.checked = stoneData.jewelryTypes?.includes(checkbox.value) || false;
+      checkbox.checked = stoneData.jewelryTypes?.some(item => item.type === checkbox.value) || false;
+    });
+
+    // Récupérer les quantités pour les types de bijoux sélectionnés
+    stoneData.jewelryTypes?.forEach(item => {
+      if (item && typeof item.type === 'string') { 
+        const normalizedType = item.type.replace(/\s|\/|'/g, '_'); // Inclure l'apostrophe
+        const quantityInput = document.querySelector(`input[name="quantity_${normalizedType}"]`);
+        if (quantityInput) {
+          // Si quantité est 1, laisser vide (comportement placeholder), sinon afficher la quantité
+          quantityInput.value = item.quantity > 1 ? item.quantity : ''; 
+          quantityInput.disabled = false;
+          quantityInput.placeholder = '1'; // Définir le placeholder car coché (implicitement)
+        } 
+      } else {
+        // Log facultatif pour identifier les données malformées
+        console.warn('Item de type de bijou malformé ignoré lors de la modification:', item);
+      }
     });
 
     if (stoneData.image && typeof stoneData.image === 'string' && stoneData.image.startsWith('data:image')) {
@@ -357,14 +435,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       imagePreview.style.display = 'block';
       imageDropZone.classList.add('has-image');
       removeImageBtn.style.display = 'inline-block';
-      currentImageBase64 = stoneData.image;
+      currentImageBase64 = stoneData.image; // Mettre à jour l'image actuelle
     } else {
       resetImagePreview();
+      currentImageBase64 = null; // S'assurer qu'il n'y a pas d'image si aucune n'est fournie
     }
 
     submitButton.textContent = 'Modifier la pierre';
     isEditing = true;
-    editingStoneId = String(stoneData.id); // <-- Assurer que c'est une string
+    editingStoneId = String(stoneData.id); // Assurer que c'est une string
 
     activateTab(document.querySelector('.tab-link[data-tab="tab-add-stone"]'));
     stoneNameInput.focus();
@@ -375,6 +454,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     addStoneForm.reset();
     jewelryCheckboxesContainer.querySelectorAll('input[name="jewelry-type"]').forEach(checkbox => {
         checkbox.checked = false;
+        const normalizedType = checkbox.value.replace(/\s|\/|'/g, '_');
+        const quantityInput = document.querySelector(`input[name="quantity_${normalizedType}"]`);
+        if (quantityInput) {
+          quantityInput.value = ''; // Réinitialiser à vide
+          quantityInput.placeholder = ''; // Retirer le placeholder
+          quantityInput.disabled = true;
+        }
     });
     resetImagePreview();
     submitButton.textContent = 'Ajouter la pierre';
@@ -403,13 +489,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         jewelryCheckboxesContainer.querySelectorAll('input[name="jewelry-type"]:checked')
     ).map(cb => cb.value);
 
+    // Récupérer les quantités pour les types de bijoux sélectionnés
+    const jewelryTypesWithQuantities = selectedJewelryTypes.map(type => {
+      const normalizedType = type.replace(/\s|\/|'/g, '_');
+      const quantityInput = document.querySelector(`input[name="quantity_${normalizedType}"]`);
+      let quantity = 1; // Défaut à 1 si la case est cochée
+      if (quantityInput) {
+        const parsedValue = parseInt(quantityInput.value, 10);
+        // Si une valeur valide >= 1 est entrée, l'utiliser
+        if (!isNaN(parsedValue) && parsedValue >= 1) {
+          quantity = parsedValue;
+        }
+      }
+       return { type: type, quantity: quantity };
+     });
+
     // Prépare les données pour l'API. L'ID est inclus SEULEMENT si on modifie.
     const stoneDataForBackend = {
         name: stoneName,
         virtues: stoneVirtues,
         purification: stonePurificationInput.value.trim(),
         recharge: stoneRechargeInput.value.trim(),
-        jewelryTypes: selectedJewelryTypes,
+        jewelryTypes: jewelryTypesWithQuantities,
         image: currentImageBase64, // L'image base64
         ...(isEditing && { id: editingStoneId }) // Ajoute l'id uniquement en mode édition
     };
@@ -462,9 +563,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ==========================================================================
-  // GESTION DE L'UPLOAD D'IMAGE (inchangé)
-  // ==========================================================================
-  function handleFileSelect(file) { /* ... (code inchangé) ... */
+// GESTION DE L'UPLOAD D'IMAGE
+// ==========================================================================
+  function handleFileSelect(file) {
         if (!file || !file.type.startsWith('image/')) {
             resetImagePreview();
             return;
@@ -500,69 +601,72 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
           img.onerror = function() {
             console.error("Erreur de chargement de l'image pour redimensionnement.");
-            alert("Le fichier sélectionné ne semble pas être une image valide ou est corrompu.");
+            showToast("Le fichier sélectionné ne semble pas être une image valide.", "error");
             resetImagePreview();
           }
           img.src = e.target.result;
         }
         reader.onerror = function() {
           console.error("Erreur de lecture du fichier.");
-          alert("Une erreur s'est produite lors de la lecture du fichier.");
+          showToast("Erreur lors de la lecture du fichier.", "error");
           resetImagePreview();
         }
         reader.readAsDataURL(file);
   }
-  function resetImagePreview() { /* ... (code inchangé) ... */
-    imageInput.value = null;
+
+  function resetImagePreview() {
+    stoneImageInput.value = null;
     imagePreview.src = '#';
     imagePreview.style.display = 'none';
     imageDropZone.classList.remove('has-image');
     removeImageBtn.style.display = 'none';
     currentImageBase64 = null;
   }
-  // --- Écouteurs d'événements pour l'image --- (inchangés)
-  imageDropZone.addEventListener('click', (e) => { /* ... */ if (e.target !== removeImageBtn) { imageInput.click(); } });
-  imageInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
-  removeImageBtn.addEventListener('click', (e) => { /* ... */ e.preventDefault(); e.stopPropagation(); resetImagePreview(); });
-  imageDropZone.addEventListener('dragover', (e) => { /* ... */ e.preventDefault(); imageDropZone.classList.add('drag-over'); });
+
+  // --- Écouteurs d'événements pour l'image ---
+  imageDropZone.addEventListener('click', (e) => { if (e.target !== removeImageBtn) { stoneImageInput.click(); } });
+  stoneImageInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
+  removeImageBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); resetImagePreview(); });
+  imageDropZone.addEventListener('dragover', (e) => { e.preventDefault(); imageDropZone.classList.add('drag-over'); });
   imageDropZone.addEventListener('dragleave', () => imageDropZone.classList.remove('drag-over'));
-  imageDropZone.addEventListener('drop', (e) => { /* ... */ e.preventDefault(); imageDropZone.classList.remove('drag-over'); if (e.dataTransfer.files.length > 0) { handleFileSelect(e.dataTransfer.files[0]); } });
-
+  imageDropZone.addEventListener('drop', (e) => { e.preventDefault(); imageDropZone.classList.remove('drag-over'); if (e.dataTransfer.files.length > 0) { handleFileSelect(e.dataTransfer.files[0]); } });
 
   // ==========================================================================
-  // GESTION DE LA MODALE DE CONFIRMATION (peu de changements, sauf bouton confirmer)
+  // GESTION DE LA MODALE DE CONFIRMATION
   // ==========================================================================
-  function showConfirmationModal() { /* ... (inchangé) ... */
+  function showConfirmationModal(stoneId, chakraId) {
+    stoneToDeleteId = stoneId;
+    chakraOfStoneToDelete = chakraId;
     confirmationModal.style.display = 'flex';
-    confirmationModal.offsetHeight;
+    confirmationModal.offsetHeight; // Force reflow pour l'animation
     confirmationModal.classList.add('visible');
     confirmDeleteBtn.focus();
   }
-  function hideConfirmationModal() { /* ... (inchangé) ... */
+
+  function hideConfirmationModal() {
     confirmationModal.classList.remove('visible');
+    // Utiliser transitionend pour masquer l'élément après l'animation
     confirmationModal.addEventListener('transitionend', () => {
         confirmationModal.style.display = 'none';
     }, { once: true });
-    // Ne réinitialise plus ici, mais après la confirmation/annulation
-    // stoneToDeleteId = null;
-    // chakraOfStoneToDelete = null;
+    // Ne pas réinitialiser les IDs ici, mais après confirmation/annulation
   }
 
   // ==========================================================================
   // ÉCOUTEURS D'ÉVÉNEMENTS PRINCIPAUX
   // ==========================================================================
 
-  // Clic sur une pierre chakra SVG (inchangé)
+  // Clic sur une pierre chakra SVG
   chakraStonesElements.forEach((stone) => {
     stone.addEventListener("click", () => {
       showPanel(stone.id);
     });
   });
 
-  // Fermeture du panneau (inchangé)
+  // Fermeture du panneau
   closePanelButton.addEventListener("click", hidePanel);
 
-  // Navigation par onglets (inchangé)
+  // Navigation par onglets
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => activateTab(tab));
   });
@@ -570,12 +674,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Clics dans la liste des pierres (modification/suppression)
   stoneList.addEventListener('click', (event) => {
     const target = event.target;
-    // Cherche le bouton cliqué, puis remonte au LI parent pour trouver l'ID
     const button = target.closest('.edit-stone-btn, .delete-stone-btn');
-    if (!button) return; // Sort si on n'a pas cliqué sur un des boutons
+    if (!button) return;
 
     const listItem = button.closest('li');
-    const stoneIdStr = listItem?.getAttribute('data-stone-id'); // Récupère l'ID string
+    const stoneIdStr = listItem?.getAttribute('data-stone-id');
 
     if (!stoneIdStr) {
         console.error("Impossible de trouver l'ID de la pierre pour l'action.");
@@ -583,17 +686,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (button.classList.contains('delete-stone-btn')) {
-      stoneToDeleteId = stoneIdStr; // Stocker l'ID string
-      chakraOfStoneToDelete = currentChakraId;
-      showConfirmationModal();
+      showConfirmationModal(stoneIdStr, currentChakraId);
     } else if (button.classList.contains('edit-stone-btn')) {
-       // Trouver la pierre dans l'état local (allStonesData)
-       const stoneToEdit = allStonesData[currentChakraId]?.find(s => String(s.id) === stoneIdStr); // Comparer les strings
+       const stoneToEdit = allStonesData[currentChakraId]?.find(s => String(s.id) === stoneIdStr);
        if (stoneToEdit) {
-         populateEditForm(stoneToEdit);
+         populateEditForm(stoneToEdit); // Utiliser populateEditForm
        } else {
-         console.error("Pierre à modifier non trouvée dans les données locales:", stoneIdStr, allStonesData[currentChakraId]);
-         alert("Erreur : Impossible de trouver les données de cette pierre pour la modification.");
+         console.error("Pierre à modifier non trouvée:", stoneIdStr);
+         showToast("Erreur: Impossible de trouver les données de cette pierre.", "error");
        }
     }
   });
@@ -601,72 +701,79 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Boutons de la modale de confirmation
   cancelDeleteBtn.addEventListener('click', () => {
       hideConfirmationModal();
-      // Réinitialiser les IDs seulement à l'annulation ou après succès
       stoneToDeleteId = null;
       chakraOfStoneToDelete = null;
   });
 
-  confirmDeleteBtn.addEventListener('click', async () => { // <-- Ajout de async
-    if (stoneToDeleteId && chakraOfStoneToDelete) {
-
-      // Désactiver bouton pendant l'appel
-      confirmDeleteBtn.disabled = true;
-      cancelDeleteBtn.disabled = true;
-
-      const success = await deleteStoneBackend(stoneToDeleteId); // Appelle le backend
-
-      // Réactiver boutons
-       confirmDeleteBtn.disabled = false;
-       cancelDeleteBtn.disabled = false;
-
-      if (success) {
-        // --- Mise à jour de l'état local (allStonesData) ---
-        if (allStonesData[chakraOfStoneToDelete]) {
-           const initialLength = allStonesData[chakraOfStoneToDelete].length;
-           // Filtre basé sur l'ID string
-           allStonesData[chakraOfStoneToDelete] = allStonesData[chakraOfStoneToDelete].filter(
-               (stone) => String(stone.id) !== stoneToDeleteId
-           );
-           if (allStonesData[chakraOfStoneToDelete].length < initialLength) {
-                console.log("État local mis à jour (suppression):", allStonesData);
-           }
-           // Optionnel : nettoyer si le tableau est vide
-           if (allStonesData[chakraOfStoneToDelete].length === 0) {
-             delete allStonesData[chakraOfStoneToDelete];
-           }
-        }
-        // --- Fin mise à jour état local ---
-
-        // Supprimer l'élément de la liste affichée
-        const listItemToDelete = stoneList.querySelector(`li[data-stone-id="${stoneToDeleteId}"]`);
-        if (listItemToDelete) {
-          listItemToDelete.remove();
-        }
-
-        // Vérifier si la liste est maintenant vide et afficher le message
-        if (stoneList.children.length === 0) {
-          stoneList.innerHTML = initialStoneListMessageHTML;
-        }
-
-      } else {
-        // L'erreur a déjà été signalée par deleteStoneBackend via une alerte
-        console.error("La suppression a échoué côté backend.");
-      }
-    } else {
+  confirmDeleteBtn.addEventListener('click', async () => {
+    if (!stoneToDeleteId || !chakraOfStoneToDelete) {
       console.error("Erreur : ID de pierre ou chakra manquant pour la suppression.");
+      hideConfirmationModal();
+      return;
     }
-    hideConfirmationModal(); // Fermer la modale
-    // Réinitialiser les IDs après l'opération
+
+    confirmDeleteBtn.disabled = true;
+    cancelDeleteBtn.disabled = true;
+
+    const success = await deleteStoneBackend(stoneToDeleteId);
+
+    confirmDeleteBtn.disabled = false;
+    cancelDeleteBtn.disabled = false;
+
+    if (success) {
+      // Mise à jour état local et UI
+      if (allStonesData[chakraOfStoneToDelete]) {
+         allStonesData[chakraOfStoneToDelete] = allStonesData[chakraOfStoneToDelete].filter(
+             (stone) => String(stone.id) !== stoneToDeleteId
+         );
+         if (allStonesData[chakraOfStoneToDelete].length === 0) {
+           delete allStonesData[chakraOfStoneToDelete];
+         }
+      }
+      const listItemToDelete = stoneList.querySelector(`li[data-stone-id="${stoneToDeleteId}"]`);
+      if (listItemToDelete) listItemToDelete.remove();
+
+      if (stoneList.children.length === 0) {
+        stoneList.innerHTML = initialStoneListMessageHTML;
+      }
+      showToast("Pierre supprimée avec succès.", "success");
+    } else {
+      showToast("Échec de la suppression de la pierre.", "error");
+    }
+
+    hideConfirmationModal();
     stoneToDeleteId = null;
     chakraOfStoneToDelete = null;
   });
 
   // Soumission du formulaire
-  addStoneForm.addEventListener("submit", handleFormSubmit); // handleFormSubmit est déjà async
+  addStoneForm.addEventListener("submit", handleFormSubmit);
 
+  // Ajouter des écouteurs d'événements aux cases à cocher de type de bijou
+  jewelryCheckboxesContainer.querySelectorAll('input[name="jewelry-type"]').forEach(checkbox => {
+    checkbox.addEventListener('change', handleJewelryCheckboxChange);
+  });
+
+  // Gérer le changement d'état des cases à cocher de bijoux (gardée d'avant)
+  function handleJewelryCheckboxChange(event) {
+    const checkbox = event.target;
+    const normalizedType = checkbox.value.replace(/\s|\/|'/g, '_');
+    const quantityInput = document.querySelector(`input[name="quantity_${normalizedType}"]`);
+    if (quantityInput) {
+      quantityInput.disabled = !checkbox.checked;
+      if (checkbox.checked) {
+        // Laisser vide quand on coche pour simuler un placeholder pour '1'
+        quantityInput.value = ''; 
+        quantityInput.placeholder = '1';
+      } else {
+        quantityInput.value = ''; // Vider si décoché
+        quantityInput.placeholder = '';
+      }
+    }
+  }
+
+  // INITIALISATION
   // ==========================================================================
-// INITIALISATION
-// ==========================================================================
   confirmationModal.style.display = 'none';
   stoneList.innerHTML = initialStoneListMessageHTML; // Mettre le message initial par défaut
 
