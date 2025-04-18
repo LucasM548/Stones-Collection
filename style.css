@@ -181,15 +181,20 @@ h1 {
 }
 
 @keyframes chakra-glow-pulse {
-  from {
-    box-shadow: 0 0 0 12px var(--stone-color, 0.65), 0 0 32px 12px var(--stone-color, 0.55);
-    filter: drop-shadow(0 0 24px var(--stone-color, 0.65)) drop-shadow(0 0 12px var(--stone-color, 0.55));
-    fill-opacity: 0.70;
+  0% {
+    box-shadow: 0 0 0 12px var(--stone-color), 0 0 32px 12px var(--stone-color);
+    filter: drop-shadow(0 0 24px var(--stone-color)) drop-shadow(0 0 12px var(--stone-color));
+    fill-opacity: 0.7;
   }
-  to {
-    box-shadow: 0 0 0 28px var(--stone-color, 1), 0 0 64px 28px var(--stone-color, 0.85);
-    filter: drop-shadow(0 0 48px var(--stone-color, 0.95)) drop-shadow(0 0 24px var(--stone-color, 0.85));
+  50% {
+    box-shadow: 0 0 0 40px var(--stone-color), 0 0 90px 40px var(--stone-color);
+    filter: drop-shadow(0 0 70px var(--stone-color)) drop-shadow(0 0 35px var(--stone-color)) brightness(1.6);
     fill-opacity: 1;
+  }
+  100% {
+    box-shadow: 0 0 0 12px var(--stone-color), 0 0 32px 12px var(--stone-color);
+    filter: drop-shadow(0 0 24px var(--stone-color)) drop-shadow(0 0 12px var(--stone-color));
+    fill-opacity: 0.7;
   }
 }
 
@@ -208,9 +213,9 @@ h1 {
 }
 
 .chakra-svg-stone.selected {
-  box-shadow: 0 0 0 6px var(--stone-color, 0.3), 0 0 16px 6px var(--stone-color, 0.25);
+  box-shadow: 0 0 0 6px var(--stone-color), 0 0 16px 6px var(--stone-color);
   filter: drop-shadow(0 0 32px var(--stone-color)) drop-shadow(0 0 16px var(--stone-color));
-  animation: chakra-glow-pulse 0.4s cubic-bezier(.4,2,.6,1) infinite alternate;
+  animation: chakra-glow-pulse 1.5s cubic-bezier(.25,.1,.25,1) infinite;
   z-index: 2;
 }
 
