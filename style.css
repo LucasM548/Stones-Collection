@@ -3,7 +3,7 @@
  * VARIABLES GLOBALES
  * =============================================================================
  */
- :root {
+:root {
   /* Couleurs des Chakras */
   --chakra-color-root: #ff4d4d;
   --chakra-color-sacral: #ff9a4d;
@@ -56,7 +56,12 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, var(--color-background-start), var(--color-background-mid), var(--color-background-end));
+  background: linear-gradient(
+    135deg,
+    var(--color-background-start),
+    var(--color-background-mid),
+    var(--color-background-end)
+  );
   color: var(--color-text-light);
   min-height: 100vh;
   display: flex;
@@ -158,8 +163,16 @@ h1 {
   margin: 0 auto 30px auto;
   width: 80%;
   max-width: 600px;
-  mask-image: radial-gradient(ellipse closest-side, black 70%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse closest-side, black 70%, transparent 100%);
+  mask-image: radial-gradient(
+    ellipse closest-side,
+    black 70%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse closest-side,
+    black 70%,
+    transparent 100%
+  );
 }
 
 #chakra-svg {
@@ -170,30 +183,30 @@ h1 {
 
 .chakra-svg-stone {
   cursor: pointer;
-  fill-opacity: 0.70;
+  fill-opacity: 0.7;
   fill: var(--stone-color, #ccc); /* Use the variable, provide fallback */
-  transition:
-    transform 0.18s cubic-bezier(.4,2,.6,1),
-    box-shadow 0.18s,
-    filter 0.18s,
-    outline 0.18s;
+  transition: transform 0.18s cubic-bezier(0.4, 2, 0.6, 1), box-shadow 0.18s,
+    filter 0.18s, outline 0.18s;
   position: absolute;
 }
 
 @keyframes chakra-glow-pulse {
   0% {
     box-shadow: 0 0 0 12px var(--stone-color), 0 0 32px 12px var(--stone-color);
-    filter: drop-shadow(0 0 24px var(--stone-color)) drop-shadow(0 0 12px var(--stone-color));
+    filter: drop-shadow(0 0 24px var(--stone-color))
+      drop-shadow(0 0 12px var(--stone-color));
     fill-opacity: 0.7;
   }
   50% {
     box-shadow: 0 0 0 40px var(--stone-color), 0 0 90px 40px var(--stone-color);
-    filter: drop-shadow(0 0 70px var(--stone-color)) drop-shadow(0 0 35px var(--stone-color)) brightness(1.6);
+    filter: drop-shadow(0 0 70px var(--stone-color))
+      drop-shadow(0 0 35px var(--stone-color)) brightness(1.6);
     fill-opacity: 1;
   }
   100% {
     box-shadow: 0 0 0 12px var(--stone-color), 0 0 32px 12px var(--stone-color);
-    filter: drop-shadow(0 0 24px var(--stone-color)) drop-shadow(0 0 12px var(--stone-color));
+    filter: drop-shadow(0 0 24px var(--stone-color))
+      drop-shadow(0 0 12px var(--stone-color));
     fill-opacity: 0.7;
   }
 }
@@ -201,24 +214,27 @@ h1 {
 .chakra-svg-stone.selected:hover,
 .chakra-svg-stone.selected:focus-visible {
   /* Keep selected effect even when hovered/focused */
-  box-shadow: 0 0 0 6px var(--stone-color, 0.3), 0 0 16px 6px var(--stone-color, 0.25);
-  filter: drop-shadow(0 0 32px var(--stone-color)) drop-shadow(0 0 16px var(--stone-color));
+  box-shadow: 0 0 0 6px var(--stone-color, 0.3),
+    0 0 16px 6px var(--stone-color, 0.25);
+  filter: drop-shadow(0 0 32px var(--stone-color))
+    drop-shadow(0 0 16px var(--stone-color));
 }
 
 .chakra-svg-stone:hover,
 .chakra-svg-stone:focus-visible {
-  filter: drop-shadow(0 0 24px var(--stone-color)) drop-shadow(0 0 12px var(--stone-color));
-  box-shadow: 0 0 0 4px rgba(0,0,0,0.10), 0 0 0 8px var(--stone-color);
-  fill-opacity: 0.80;
+  filter: drop-shadow(0 0 24px var(--stone-color))
+    drop-shadow(0 0 12px var(--stone-color));
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), 0 0 0 8px var(--stone-color);
+  fill-opacity: 0.8;
 }
 
 .chakra-svg-stone.selected {
   box-shadow: 0 0 0 6px var(--stone-color), 0 0 16px 6px var(--stone-color);
-  filter: drop-shadow(0 0 32px var(--stone-color)) drop-shadow(0 0 16px var(--stone-color));
-  animation: chakra-glow-pulse 1.5s cubic-bezier(.25,.1,.25,1) infinite;
+  filter: drop-shadow(0 0 32px var(--stone-color))
+    drop-shadow(0 0 16px var(--stone-color));
+  animation: chakra-glow-pulse 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
   z-index: 2;
 }
-
 
 .chakra-svg-stone:active {
   filter: brightness(0.95) drop-shadow(0 0 18px var(--stone-color));
@@ -232,7 +248,9 @@ h1 {
 .info-panel {
   position: fixed;
   top: 50%;
-  right: calc(-1 * max(var(--panel-max-width), 90%)); /* Calcul dynamique pour être hors écran */
+  right: calc(
+    -1 * max(var(--panel-max-width), 90%)
+  ); /* Calcul dynamique pour être hors écran */
   transform: translateY(-50%);
   width: 90%;
   max-width: var(--panel-max-width);
@@ -258,10 +276,21 @@ h1 {
 }
 
 /* Styles Scrollbar Webkit (Chrome, Safari, Edge) */
-.info-panel::-webkit-scrollbar { width: 8px; }
-.info-panel::-webkit-scrollbar-track { background: rgba(48, 43, 99, 0.5); border-radius: 10px; }
-.info-panel::-webkit-scrollbar-thumb { background-color: var(--color-primary-action); border-radius: 10px; border: 2px solid rgba(48, 43, 99, 0.5); }
-.info-panel::-webkit-scrollbar-thumb:hover { background-color: var(--color-primary-action-hover); }
+.info-panel::-webkit-scrollbar {
+  width: 8px;
+}
+.info-panel::-webkit-scrollbar-track {
+  background: rgba(48, 43, 99, 0.5);
+  border-radius: 10px;
+}
+.info-panel::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-action);
+  border-radius: 10px;
+  border: 2px solid rgba(48, 43, 99, 0.5);
+}
+.info-panel::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary-action-hover);
+}
 
 /* Titre et Bouton Fermer */
 .info-panel h2 {
@@ -286,7 +315,9 @@ h1 {
 }
 
 .close-panel:hover {
-  color: var(--color-input-focus); /* Utilisation de la couleur focus (proche de couronne) */
+  color: var(
+    --color-input-focus
+  ); /* Utilisation de la couleur focus (proche de couronne) */
 }
 
 /* Onglets (Tabs) */
@@ -313,8 +344,14 @@ h1 {
 }
 
 .tab-link.active {
-  color: var(--active-chakra-color, var(--color-text-light)); /* Use panel variable, fallback to default */
-  border-bottom-color: var(--active-chakra-color, var(--color-text-light)); /* Use panel variable, fallback */
+  color: var(
+    --active-chakra-color,
+    var(--color-text-light)
+  ); /* Use panel variable, fallback to default */
+  border-bottom-color: var(
+    --active-chakra-color,
+    var(--color-text-light)
+  ); /* Use panel variable, fallback */
   /* Keep other base .tab-link.active styles if any (like font-weight) */
 }
 
@@ -329,8 +366,12 @@ h1 {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /**
@@ -502,7 +543,6 @@ h1 {
   display: none;
 }
 
-
 /**
  * =============================================================================
  * LISTE DES PIERRES (Stone List)
@@ -522,10 +562,20 @@ h1 {
 }
 
 /* Styles Scrollbar Webkit */
-#stone-list::-webkit-scrollbar { width: 6px; }
-#stone-list::-webkit-scrollbar-track { background: rgba(48, 43, 99, 0.5); border-radius: 10px; }
-#stone-list::-webkit-scrollbar-thumb { background-color: var(--color-primary-action); border-radius: 10px; }
-#stone-list::-webkit-scrollbar-thumb:hover { background-color: var(--color-primary-action-hover); }
+#stone-list::-webkit-scrollbar {
+  width: 6px;
+}
+#stone-list::-webkit-scrollbar-track {
+  background: rgba(48, 43, 99, 0.5);
+  border-radius: 10px;
+}
+#stone-list::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-action);
+  border-radius: 10px;
+}
+#stone-list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary-action-hover);
+}
 
 /* Inside #stone-list li rule */
 #stone-list li {
@@ -542,15 +592,30 @@ h1 {
 }
 
 /* Add rules for each chakra using the data attribute */
-#stone-list li[data-chakra="root"] { border-left-color: var(--chakra-color-root); }
-#stone-list li[data-chakra="sacral"] { border-left-color: var(--chakra-color-sacral); }
-#stone-list li[data-chakra="solar-plexus"] { border-left-color: var(--chakra-color-solar-plexus); }
-#stone-list li[data-chakra="heart"] { border-left-color: var(--chakra-color-heart); }
-#stone-list li[data-chakra="throat"] { border-left-color: var(--chakra-color-throat); }
-#stone-list li[data-chakra="third-eye"] { border-left-color: var(--chakra-color-third-eye); }
-#stone-list li[data-chakra="crown"] { border-left-color: var(--chakra-color-crown); }
-#stone-list li[data-chakra="secondary"] { border-left-color: var(--chakra-color-secondary); }
-
+#stone-list li[data-chakra="root"] {
+  border-left-color: var(--chakra-color-root);
+}
+#stone-list li[data-chakra="sacral"] {
+  border-left-color: var(--chakra-color-sacral);
+}
+#stone-list li[data-chakra="solar-plexus"] {
+  border-left-color: var(--chakra-color-solar-plexus);
+}
+#stone-list li[data-chakra="heart"] {
+  border-left-color: var(--chakra-color-heart);
+}
+#stone-list li[data-chakra="throat"] {
+  border-left-color: var(--chakra-color-throat);
+}
+#stone-list li[data-chakra="third-eye"] {
+  border-left-color: var(--chakra-color-third-eye);
+}
+#stone-list li[data-chakra="crown"] {
+  border-left-color: var(--chakra-color-crown);
+}
+#stone-list li[data-chakra="secondary"] {
+  border-left-color: var(--chakra-color-secondary);
+}
 
 #stone-list li:hover {
   background: rgba(0, 0, 0, 0.25); /* Effet léger au survol */
@@ -588,14 +653,14 @@ h1 {
   text-overflow: ellipsis;
 }
 
-.stone-text span { /* Pour la description */
-    font-size: 0.9em;
-    color: var(--color-text-muted);
-    display: block; /* Assure qu'il prend sa propre ligne si nécessaire */
-    /* Gérer le débordement potentiel de la description si elle est très longue */
-    white-space: normal; /* Permet le retour à la ligne */
+.stone-text span {
+  /* Pour la description */
+  font-size: 0.9em;
+  color: var(--color-text-muted);
+  display: block; /* Assure qu'il prend sa propre ligne si nécessaire */
+  /* Gérer le débordement potentiel de la description si elle est très longue */
+  white-space: normal; /* Permet le retour à la ligne */
 }
-
 
 /* Conteneur pour les boutons d'action */
 .stone-buttons {
@@ -615,7 +680,7 @@ h1 {
   transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
 }
 .stone-buttons button:active {
-    transform: scale(0.9); /* Effet d'appui */
+  transform: scale(0.9); /* Effet d'appui */
 }
 
 .edit-stone-btn {
@@ -641,7 +706,6 @@ h1 {
   width: 100%; /* Prend toute la largeur */
   text-align: center;
 }
-
 
 /**
  * =============================================================================
@@ -701,9 +765,9 @@ h1 {
 }
 
 .modal-buttons {
-    display: flex;
-    justify-content: center; /* Centre les boutons */
-    gap: 15px; /* Espace entre boutons */
+  display: flex;
+  justify-content: center; /* Centre les boutons */
+  gap: 15px; /* Espace entre boutons */
 }
 
 .modal-buttons button {
@@ -713,11 +777,12 @@ h1 {
   cursor: pointer;
   font-size: 1em;
   font-weight: 500; /* Un peu plus de poids */
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 .modal-buttons button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre au survol */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre au survol */
 }
 
 .modal-buttons .btn-danger {
@@ -736,7 +801,6 @@ h1 {
   background-color: var(--color-secondary-hover);
 }
 
-
 /**
  * =============================================================================
  * RESPONSIVE DESIGN
@@ -749,15 +813,29 @@ h1 {
     padding: 15px;
   }
 
-  h1 { font-size: 2.2em; }
-  .subtitle { font-size: 1em; margin-bottom: 30px; }
+  h1 {
+    font-size: 2.2em;
+  }
+  .subtitle {
+    font-size: 1em;
+    margin-bottom: 30px;
+  }
 
   /* Ajustements pour l'ancien conteneur chakra (si toujours utilisé) */
-  .chakra-container { height: 55vh; width: 80px; }
-  .chakra-stone { width: 40px; height: 40px; }
+  .chakra-container {
+    height: 55vh;
+    width: 80px;
+  }
+  .chakra-stone {
+    width: 40px;
+    height: 40px;
+  }
 
   /* Ajustements pour le conteneur SVG */
-  .chakra-svg-container { width: 90%; max-width: 450px; }
+  .chakra-svg-container {
+    width: 90%;
+    max-width: 450px;
+  }
 
   /* Panneau d'information en bas */
   .info-panel {
@@ -778,9 +856,17 @@ h1 {
     bottom: 0; /* Aligne en bas */
   }
 
-  .info-panel h2 { font-size: 1.4em; margin-bottom: 15px; }
-  .tab-link { font-size: 0.9em; padding: 8px 10px; }
-  #stone-list { max-height: 200px; } /* Réduit hauteur max liste */
+  .info-panel h2 {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+  }
+  .tab-link {
+    font-size: 0.9em;
+    padding: 8px 10px;
+  }
+  #stone-list {
+    max-height: 200px;
+  } /* Réduit hauteur max liste */
 }
 
 /* Mobile (max-width: 480px) */
@@ -794,11 +880,11 @@ h1 {
   background: var(--color-panel-bg); /* Use theme variable */
   border-radius: 50%;
   padding: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: background-color 0.2s, box-shadow 0.2s; /* Added background transition */
 }
 #admin-login-icon:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   background: var(--color-primary-action-hover); /* Use theme hover variable */
 }
 #admin-login-img {
@@ -817,20 +903,21 @@ h1 {
   width: 100vw;
   height: 100vh;
   overflow: auto;
-  background-color: rgba(0,0,0,0.45);
+  background-color: rgba(0, 0, 0, 0.45);
   justify-content: center;
   align-items: center;
 }
 .modal.visible {
   display: flex;
 }
-.modal-content { /* This style applies to the general modal, let's ensure admin login modal also uses theme variables */
+.modal-content {
+  /* This style applies to the general modal, let's ensure admin login modal also uses theme variables */
   /* Assuming admin modal uses this class, verify if specific ID #admin-login-modal exists */
   background: var(--color-panel-bg); /* Use theme variable */
   margin: auto;
   padding: 30px 24px 24px 24px;
   border-radius: var(--border-radius-large); /* Use theme variable */
-  box-shadow: 0 6px 32px rgba(0,0,0,0.18);
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.18);
   min-width: 260px;
   max-width: 90vw;
   text-align: center;
@@ -838,7 +925,8 @@ h1 {
   border: 1px solid var(--color-panel-border); /* Use theme variable */
   color: var(--color-text-light); /* Use theme variable */
 }
-.close { /* Style for the close button within the admin modal context */
+.close {
+  /* Style for the close button within the admin modal context */
   position: absolute;
   top: 10px;
   right: 16px;
@@ -869,7 +957,9 @@ h1 {
   box-shadow: 0 0 8px var(--color-input-focus);
 }
 
-#admin-login-btn, #admin-logout-btn { /* Logout button needs styling too */
+#admin-login-btn,
+#admin-logout-btn {
+  /* Logout button needs styling too */
   padding: 12px 25px; /* Increased padding */
   margin: 12px 0 0 0;
   background: var(--color-primary-action); /* Use theme variable */
@@ -881,14 +971,17 @@ h1 {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.1s ease;
 }
-#admin-login-btn:hover, #admin-logout-btn:hover {
+#admin-login-btn:hover,
+#admin-logout-btn:hover {
   background: var(--color-primary-action-hover); /* Use theme variable */
 }
-#admin-login-btn:active, #admin-logout-btn:active {
+#admin-login-btn:active,
+#admin-logout-btn:active {
   transform: scale(0.98);
 }
 
-.error-message { /* Style for error message in admin modal */
+.error-message {
+  /* Style for error message in admin modal */
   color: var(--color-warning); /* Use theme variable */
   margin-top: 6px;
   font-size: 0.98em;
@@ -902,44 +995,97 @@ h1 {
     /* font-size: 14px; */
   }
 
-  h1 { font-size: 1.8em; }
-  .subtitle { font-size: 0.9em; margin-bottom: 25px; }
+  h1 {
+    font-size: 1.8em;
+  }
+  .subtitle {
+    font-size: 0.9em;
+    margin-bottom: 25px;
+  }
 
   /* Ajustements pour l'ancien conteneur chakra (si toujours utilisé) */
-  .chakra-container { height: 50vh; width: 60px; }
-  .chakra-stone { width: 35px; height: 35px; }
+  .chakra-container {
+    height: 50vh;
+    width: 60px;
+  }
+  .chakra-stone {
+    width: 35px;
+    height: 35px;
+  }
 
   /* Ajustements pour le conteneur SVG */
-  .chakra-svg-container { width: 95%; max-width: 300px; }
+  .chakra-svg-container {
+    width: 95%;
+    max-width: 300px;
+  }
 
   .info-panel {
     padding: 15px;
     max-height: 55vh; /* Encore un peu moins haut */
   }
-  .info-panel h2 { font-size: 1.3em; }
-  .tabs { margin-bottom: 15px; }
-  .tab-link { font-size: 0.85em; padding: 8px; } /* Ajustement taille/padding */
+  .info-panel h2 {
+    font-size: 1.3em;
+  }
+  .tabs {
+    margin-bottom: 15px;
+  }
+  .tab-link {
+    font-size: 0.85em;
+    padding: 8px;
+  } /* Ajustement taille/padding */
 
-  #add-stone-form label { font-size: 0.95em; }
+  #add-stone-form label {
+    font-size: 0.95em;
+  }
   #add-stone-form input[type="text"],
   #add-stone-form textarea,
-  #add-stone-form select { padding: 8px; }
-  #add-stone-form button[type="submit"] { padding: 10px 15px; font-size: 0.95em; }
+  #add-stone-form select {
+    padding: 8px;
+  }
+  #add-stone-form button[type="submit"] {
+    padding: 10px 15px;
+    font-size: 0.95em;
+  }
 
   /* Ajustements pour la liste des pierres */
-  #stone-list li { padding: 8px 10px; }
-  .stone-list-image { width: 40px; height: 40px; }
-  .stone-info { gap: 8px; }
-  .stone-text strong { font-size: 0.95em; }
-  .stone-text span { font-size: 0.85em; }
-  .stone-buttons button { font-size: 1.2rem; }
+  #stone-list li {
+    padding: 8px 10px;
+  }
+  .stone-list-image {
+    width: 40px;
+    height: 40px;
+  }
+  .stone-info {
+    gap: 8px;
+  }
+  .stone-text strong {
+    font-size: 0.95em;
+  }
+  .stone-text span {
+    font-size: 0.85em;
+  }
+  .stone-buttons button {
+    font-size: 1.2rem;
+  }
 
   /* Modale */
-  .modal-content { padding: 20px; width: 90%; }
-  .modal-content h2 { font-size: 1.25em; }
-  .modal-content p { font-size: 1em; }
-  .modal-buttons { gap: 10px; }
-  .modal-buttons button { padding: 8px 20px; font-size: 0.9em; }
+  .modal-content {
+    padding: 20px;
+    width: 90%;
+  }
+  .modal-content h2 {
+    font-size: 1.25em;
+  }
+  .modal-content p {
+    font-size: 1em;
+  }
+  .modal-buttons {
+    gap: 10px;
+  }
+  .modal-buttons button {
+    padding: 8px 20px;
+    font-size: 0.9em;
+  }
 }
 
 /* Styles pour les groupes de cases à cocher */
@@ -967,13 +1113,18 @@ h1 {
   width: 55px; /* Largeur ajustée */
   padding: 6px 8px; /* Harmoniser avec les autres inputs */
   border: 1px solid var(--color-input-border); /* Utiliser la variable de couleur de bordure */
-  border-radius: var(--border-radius-standard); /* Utiliser la variable de rayon de bordure */
+  border-radius: var(
+    --border-radius-standard
+  ); /* Utiliser la variable de rayon de bordure */
   font-size: 0.9em;
   text-align: center;
-  background-color: var(--color-input-bg); /* Utiliser la variable de couleur de fond */
+  background-color: var(
+    --color-input-bg
+  ); /* Utiliser la variable de couleur de fond */
   color: var(--color-text-light); /* Utiliser la variable de couleur de texte */
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Ombre interne subtile */
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.3s ease;
   appearance: none; /* Propriété standard */
 }
 
@@ -984,7 +1135,9 @@ h1 {
 }
 
 .jewelry-type-item input[type="number"]:disabled {
-  background-color: var(--color-input-bg); /* Utiliser la variable de fond désactivé */
+  background-color: var(
+    --color-input-bg
+  ); /* Utiliser la variable de fond désactivé */
   border-color: var(--color-input-border);
   color: var(--color-text-muted); /* Couleur de texte atténuée */
   cursor: not-allowed;
