@@ -262,7 +262,7 @@ h1 {
   padding: 25px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
   transition: right 0.5s ease-in-out;
-  z-index: 10;
+  z-index: 1002;
   color: var(--color-text-light);
   border: 1px solid var(--color-panel-border);
 
@@ -312,6 +312,7 @@ h1 {
   cursor: pointer;
   transition: color 0.3s ease;
   line-height: 1; /* Évite des hauteurs inattendues */
+  text-align: center;
 }
 
 .close-panel:hover {
@@ -580,41 +581,32 @@ h1 {
 /* Inside #stone-list li rule */
 #stone-list li {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background: rgba(0, 0, 0, 0.15);
-  padding: 10px 15px; /* Padding ajusté */
-  margin-bottom: 8px; /* Espace réduit entre items */
+  gap: 12px;
+  background: var(--color-panel-bg);
+  padding: 15px;
+  margin-bottom: 12px;
   border-radius: var(--border-radius-standard);
-  /* Remove the specific color here */
-  border-left: 4px solid transparent; /* Default to transparent or a base color */
-  transition: background-color 0.2s ease, border-left-color 0.2s ease; /* Add transition for border color */
+  border-left: 4px solid var(--item-chakra-color);
 }
 
-/* Add rules for each chakra using the data attribute */
-#stone-list li[data-chakra="root"] {
-  border-left-color: var(--chakra-color-root);
+.stone-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-#stone-list li[data-chakra="sacral"] {
-  border-left-color: var(--chakra-color-sacral);
+
+.stone-list-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
 }
-#stone-list li[data-chakra="solar-plexus"] {
-  border-left-color: var(--chakra-color-solar-plexus);
-}
-#stone-list li[data-chakra="heart"] {
-  border-left-color: var(--chakra-color-heart);
-}
-#stone-list li[data-chakra="throat"] {
-  border-left-color: var(--chakra-color-throat);
-}
-#stone-list li[data-chakra="third-eye"] {
-  border-left-color: var(--chakra-color-third-eye);
-}
-#stone-list li[data-chakra="crown"] {
-  border-left-color: var(--chakra-color-crown);
-}
-#stone-list li[data-chakra="secondary"] {
-  border-left-color: var(--chakra-color-secondary);
+
+.stone-buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
 }
 
 #stone-list li:hover {
@@ -622,22 +614,6 @@ h1 {
 }
 
 /* Conteneur pour les infos de la pierre (image + texte) */
-.stone-info {
-  display: flex;
-  align-items: center;
-  gap: 12px; /* Espace entre image et texte */
-  flex-grow: 1; /* Prend l'espace disponible */
-  overflow: hidden; /* Pour éviter débordement texte */
-}
-
-.stone-list-image {
-  width: 50px; /* Taille fixe pour l'image */
-  height: 50px;
-  border-radius: var(--border-radius-standard);
-  object-fit: cover;
-  flex-shrink: 0; /* Empêche l'image de rétrécir */
-}
-
 .stone-text {
   flex-grow: 1;
   overflow: hidden; /* Cache le débordement de texte long */
@@ -663,12 +639,6 @@ h1 {
 }
 
 /* Conteneur pour les boutons d'action */
-.stone-buttons {
-  display: flex;
-  gap: 8px; /* Espace entre boutons */
-  flex-shrink: 0; /* Empêche les boutons de rétrécir */
-}
-
 .stone-buttons button {
   background: none;
   border: none;
@@ -705,6 +675,19 @@ h1 {
   font-style: italic;
   width: 100%; /* Prend toute la largeur */
   text-align: center;
+}
+
+@media (max-width: 480px) {
+  #stone-list li {
+    padding: 8px 10px;
+    flex-direction: column; /* empilement vertical */
+    align-items: flex-start;
+  }
+  .stone-buttons {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
 }
 
 /**
