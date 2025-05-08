@@ -683,7 +683,6 @@ h1 {
 }
 
 .modal {
-  /* Conteneur pour le contenu de la modale, utilisé par #admin-login-modal, etc. */
   display: none;
   position: fixed;
   z-index: 20;
@@ -710,12 +709,12 @@ h1 {
   color: var(--color-text-light);
   border: 1px solid var(--color-panel-border);
   transform: scale(0.95) translateY(10px);
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Transition avec rebond */
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   max-width: 90%;
   width: 400px;
   position: relative;
-  display: flex; /* Permet d'utiliser flex-direction column */
-  flex-direction: column; /* Pour que le contenu interne s'empile bien */
+  display: flex;
+  flex-direction: column;
 }
 .modal-overlay.visible .modal-content {
   transform: scale(1) translateY(0);
@@ -736,7 +735,7 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 15px;
-  margin-top: auto; /* Pousse les boutons en bas si la modale a une hauteur fixe */
+  margin-top: auto;
 }
 .modal-buttons button {
   padding: 10px 25px;
@@ -839,14 +838,11 @@ h1 {
 }
 
 /* ===================== MODAL POUR TOUTES LES PIERRES (Desktop & Tablette) ===================== */
-/* La modale #all-stones-modal utilise .modal pour sa base et .modal-content pour son contenu */
 .all-stones-modal-content {
-  /* S'ajoute aux styles de .modal-content */
   width: 90%;
   max-width: 700px;
-  min-height: 70vh; /* Hauteur minimum pour un bon affichage */
-  max-height: 85vh; /* Limite la hauteur max */
-  /* display: flex et flex-direction: column; sont déjà sur .modal-content */
+  min-height: 70vh;
+  max-height: 85vh;
 }
 
 .all-stones-modal-content h2 {
@@ -900,7 +896,6 @@ h1 {
   border-color: var(--color-primary-action-hover);
   font-weight: bold;
 }
-/* #all-stones-global-list est déjà stylé avec #stone-list */
 
 /* MODAL ADMIN LOGIN */
 #admin-password-input {
@@ -969,19 +964,19 @@ h1 {
   }
 
   .info-panel {
-    width: 100%; /* Prend toute la largeur */
+    width: 100%;
     max-width: none;
-    right: auto; /* Annule le positionnement à droite */
-    left: 0; /* Aligne à gauche */
+    right: auto;
+    left: 0;
     top: auto;
-    bottom: -100vh; /* Commence complètement hors de l'écran en bas */
+    bottom: -100vh;
     transform: translateY(0);
     border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
-    max-height: 75vh; /* Augmenté un peu la hauteur max */
-    padding: 20px 15px; /* Ajuster le padding */
+    max-height: 75vh;
+    padding: 20px 15px;
   }
   .info-panel.visible {
-    bottom: 0; /* Aligne en bas quand visible */
+    bottom: 0;
   }
 
   .info-panel h2 {
@@ -996,11 +991,10 @@ h1 {
     max-height: 300px;
   }
 
-  /* Modale "Toutes les pierres" sur tablette/mobile */
   .all-stones-modal-content {
     width: 95%;
-    max-width: 95%; /* Prend presque toute la largeur */
-    min-height: 80vh; /* Plus de hauteur sur mobile */
+    max-width: 95%;
+    min-height: 80vh;
     max-height: 90vh;
     padding: 20px 15px;
   }
@@ -1009,7 +1003,7 @@ h1 {
     margin-bottom: 10px;
   }
   #all-stones-global-list {
-    margin-top: 10px; /* Espace avant la liste */
+    margin-top: 10px;
   }
 }
 
@@ -1051,7 +1045,7 @@ h1 {
   }
 
   .info-panel {
-    padding: 15px 10px; /* Padding réduit pour petits écrans */
+    padding: 15px 10px;
     max-height: 70vh;
   }
   .info-panel h2 {
@@ -1077,7 +1071,6 @@ h1 {
     font-size: 0.95em;
   }
 
-  /* Styles communs pour les items de liste sur mobile */
   #stone-list li,
   #all-stones-global-list li {
     padding: 10px;
@@ -1123,9 +1116,8 @@ h1 {
     font-size: 0.9em;
   }
 
-  /* Spécifique à la modale toutes les pierres sur mobile */
   .all-stones-modal-content {
-    padding: 15px 10px; /* Padding réduit */
+    padding: 15px 10px;
     min-height: 85vh;
   }
   .all-stones-controls {
@@ -1138,12 +1130,12 @@ h1 {
   .all-stones-sort-options {
     width: 100%;
     justify-content: space-around;
-    flex-wrap: wrap; /* Permet aux boutons de passer à la ligne */
+    flex-wrap: wrap;
   }
   .all-stones-sort-options .sort-btn {
     padding: 6px 10px;
     font-size: 0.85em;
-    margin-bottom: 5px; /* Si les boutons passent à la ligne */
+    margin-bottom: 5px;
   }
 
   .stone-chakra-badge {
@@ -1152,7 +1144,6 @@ h1 {
   }
 }
 
-/* Styles pour les groupes de cases à cocher */
 .checkbox-group {
   display: flex;
   flex-direction: column;
