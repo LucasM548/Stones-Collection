@@ -427,14 +427,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       return savedStone;
     } catch (error) {
       console.error(
-        `Erreur lors de ${
-          isEditingOperation ? "la modification" : "l'ajout"
+        `Erreur lors de ${isEditingOperation ? "la modification" : "l'ajout"
         } via backend:`,
         error
       );
       showToast(
-        `Une erreur est survenue lors de ${
-          isEditingOperation ? "la modification" : "l'ajout"
+        `Une erreur est survenue lors de ${isEditingOperation ? "la modification" : "l'ajout"
         } de la pierre.`,
         "error"
       );
@@ -515,8 +513,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         <p><strong>Couleur:</strong> ${escapeHTML(chakraData.couleur)}</p>
         <p><strong>Élément:</strong> ${escapeHTML(chakraData.element)}</p>
         <p><strong>Description:</strong> ${escapeHTML(
-          chakraData.description
-        )}</p>
+        chakraData.description
+      )}</p>
       `;
     } else {
       generalInfoTabContent.innerHTML = `<p>Informations non disponibles pour ce chakra.</p>`;
@@ -583,13 +581,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const jewelryDisplay =
       Array.isArray(stoneData.jewelryTypes) && stoneData.jewelryTypes.length > 0
         ? stoneData.jewelryTypes
-            .map(
-              (item) =>
-                `${escapeHTML(item.type)}${
-                  item.quantity > 1 ? ` (x${item.quantity})` : ""
-                }`
-            )
-            .join(", ")
+          .map(
+            (item) =>
+              `${escapeHTML(item.type)}${item.quantity > 1 ? ` (x${item.quantity})` : ""
+              }`
+          )
+          .join(", ")
         : "Non spécifié";
 
     const purificationDisplay = stoneData.purification
@@ -601,12 +598,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const imageHTML =
       stoneData.image &&
-      typeof stoneData.image === "string" &&
-      stoneData.image.startsWith("data:image")
+        typeof stoneData.image === "string" &&
+        (stoneData.image.startsWith("data:image") || stoneData.image.startsWith("http"))
         ? `<img src="${stoneData.image}" alt="${escapeHTML(
-            stoneData.name
-          )}" class="stone-list-image">`
-        : '<span class="stone-list-image-placeholder"></span>';
+          stoneData.name
+        )}" class="stone-list-image">`
+        : '';
 
     const buttonStyle = isAdmin ? "" : 'style="display:none;"';
     const editBtnClass = isGlobalList
@@ -626,8 +623,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       chakraInfoHTML = `
           <div class="stone-list-chakra-info">
             <em>Chakra:</em> <span class="stone-chakra-badge" style="background-color: ${escapeHTML(
-              chakraColor
-            )}; color: ${escapeHTML(textColor)};">
+        chakraColor
+      )}; color: ${escapeHTML(textColor)};">
               ${escapeHTML(stoneData.chakraName)}
             </span>
           </div>`;
@@ -1295,11 +1292,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     allStonesGlobalList.innerHTML = "";
     if (flatStoneList.length === 0) {
-      allStonesGlobalList.innerHTML = `<li><em>${
-        searchTerm
+      allStonesGlobalList.innerHTML = `<li><em>${searchTerm
           ? "Aucune pierre ne correspond à votre recherche."
           : "Aucune pierre dans la collection."
-      }</em></li>`;
+        }</em></li>`;
       return;
     }
 

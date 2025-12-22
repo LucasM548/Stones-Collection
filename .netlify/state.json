@@ -1,3 +1,20 @@
 {
-	"siteId": "207787d2-07c0-482e-a01e-8eac1d829aa9"
+	"geolocation": {
+		"data": {
+			"city": "Longwy",
+			"country": {
+				"code": "FR",
+				"name": "France"
+			},
+			"subdivision": {
+				"code": "GES",
+				"name": "Grand Est"
+			},
+			"timezone": "Europe/Paris",
+			"latitude": 49.5215,
+			"longitude": 5.7638,
+			"postalCode": "54400"
+		},
+		"timestamp": 1766405604396
+	}
 }
