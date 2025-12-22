@@ -315,33 +315,50 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function generateJewelryCheckboxes() {
     jewelryCheckboxesContainer.innerHTML = "";
+    jewelryCheckboxesContainer.className = "jewelry-type-group"; // Ensure grid class is applied
 
     JEWELRY_TYPES.forEach((type) => {
       const normalizedType = normalizeStringType(type);
-      const itemDiv = document.createElement("div");
-      itemDiv.className = "jewelry-type-item";
 
-      const label = document.createElement("label");
+      const optionDiv = document.createElement("div");
+      optionDiv.className = "jewelry-option";
+      optionDiv.dataset.type = type;
+
+      const label = document.createElement("div");
+      label.className = "label";
+      label.textContent = type;
+
+      // Hidden inputs for state
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.name = "jewelry-type";
       checkbox.value = type;
+      checkbox.style.display = "none";
       checkbox.dataset.type = type;
-
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(` ${type}`));
 
       const quantityInput = document.createElement("input");
       quantityInput.type = "number";
       quantityInput.dataset.type = type;
       quantityInput.name = `quantity_${normalizedType}`;
-      quantityInput.min = "1";
-      quantityInput.disabled = true;
-      quantityInput.placeholder = "";
+      quantityInput.value = "1";
+      quantityInput.style.display = "none";
 
-      itemDiv.appendChild(label);
-      itemDiv.appendChild(quantityInput);
-      jewelryCheckboxesContainer.appendChild(itemDiv);
+      // Quantity Controls (Hidden by default)
+      const qtyControls = document.createElement("div");
+      qtyControls.className = "quantity-controls";
+      qtyControls.style.display = "none";
+      qtyControls.innerHTML = `
+        <button type="button" class="qty-btn minus">-</button>
+        <span class="qty-value">1</span>
+        <button type="button" class="qty-btn plus">+</button>
+      `;
+
+      optionDiv.appendChild(label);
+      optionDiv.appendChild(qtyControls);
+      optionDiv.appendChild(checkbox);
+      optionDiv.appendChild(quantityInput);
+
+      jewelryCheckboxesContainer.appendChild(optionDiv);
     });
   }
 
@@ -523,8 +540,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     displayStonesForChakra(chakraId);
     activateTab(document.querySelector('.tab-link[data-tab="tab-general"]'));
     infoPanel.classList.add("visible");
-
-    // Démarrer la mise à jour du connecteur
     startConnectorUpdate(chakraId);
 
     updateAdminUI();
@@ -536,10 +551,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       .forEach((el) => el.classList.remove("selected"));
     infoPanel.classList.remove("visible");
     infoPanel.style.removeProperty("--active-chakra-color");
-
-    // Arrêter et cacher le connecteur
     stopConnectorUpdate();
-
     currentChakraId = null;
     if (isEditing) {
       resetForm();
@@ -710,23 +722,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   ) {
     const stoneIdString = String(stoneData.id);
 
-    const jewelryDisplay =
+    const jewelryLine =
       Array.isArray(stoneData.jewelryTypes) && stoneData.jewelryTypes.length > 0
-        ? stoneData.jewelryTypes
+        ? `<em>Type(s) de bijou(x):</em> ${stoneData.jewelryTypes
           .map(
             (item) =>
               `${escapeHTML(item.type)}${item.quantity > 1 ? ` (x${item.quantity})` : ""
               }`
           )
-          .join(", ")
-        : "Non spécifié";
+          .join(", ")}`
+        : "";
 
-    const purificationDisplay = stoneData.purification
-      ? escapeHTML(stoneData.purification)
-      : "Non spécifié";
-    const rechargeDisplay = stoneData.recharge
-      ? escapeHTML(stoneData.recharge)
-      : "Non spécifié";
+    const purificationLine = stoneData.purification
+      ? `<em>Purification:</em> ${escapeHTML(stoneData.purification)}<br>`
+      : "";
+
+    const rechargeLine = stoneData.recharge
+      ? `<em>Rechargement:</em> ${escapeHTML(stoneData.recharge)}<br>`
+      : "";
 
     const imageHTML =
       stoneData.image &&
@@ -769,9 +782,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             <strong>${escapeHTML(stoneData.name)}</strong>
             ${chakraInfoHTML}
             <em>Vertus:</em> ${escapeHTML(stoneData.virtues)}<br>
-            <em>Purification:</em> ${purificationDisplay}<br>
-            <em>Rechargement:</em> ${rechargeDisplay}<br>
-            <em>Type(s) de bijou(x):</em> ${jewelryDisplay}
+            ${purificationLine}
+            ${rechargeLine}
+            ${jewelryLine}
           </div>
         </div>
         <div class="stone-buttons">
@@ -903,31 +916,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     resetJewelryCheckboxesAndQuantities();
 
-    stoneData.jewelryTypes?.forEach((item) => {
-      if (item && typeof item.type === "string") {
-        const checkbox = jewelryCheckboxesContainer.querySelector(
-          `input[type="checkbox"][data-type="${item.type}"]`
-        );
-        if (checkbox) {
-          checkbox.checked = true;
-          const quantityInput = jewelryCheckboxesContainer.querySelector(
-            `input[type="number"][data-type="${item.type}"]`
+    if (Array.isArray(stoneData.jewelryTypes)) {
+      stoneData.jewelryTypes.forEach((item) => {
+        if (item && typeof item.type === "string") {
+          const optionDiv = jewelryCheckboxesContainer.querySelector(
+            `.jewelry-option[data-type="${item.type}"]`
           );
-          if (quantityInput) {
-            quantityInput.disabled = false;
-            quantityInput.value = item.quantity > 1 ? item.quantity : "";
-            quantityInput.placeholder = DEFAULT_QUANTITY_PLACEHOLDER;
+          if (optionDiv) {
+            // Activate Option
+            optionDiv.classList.add("selected");
+            const checkbox = optionDiv.querySelector('input[type="checkbox"]');
+            checkbox.checked = true;
+
+            // Set content and quantity
+            const qty = item.quantity > 1 ? item.quantity : 1;
+            const quantityInput = optionDiv.querySelector('input[type="number"]');
+            const qtyValueDisplay = optionDiv.querySelector(".qty-value");
+            const qtyControls = optionDiv.querySelector(".quantity-controls");
+
+            quantityInput.value = qty;
+            qtyValueDisplay.textContent = qty;
+
+            // Show controls
+            qtyControls.style.display = "flex";
           }
-        } else {
-          console.warn(`Checkbox non trouvée pour le type: ${item.type}`);
         }
-      } else {
-        console.warn(
-          "Item de type de bijou malformé ignoré lors de la modification:",
-          item
-        );
-      }
-    });
+      });
+    }
 
     if (
       stoneData.image &&
@@ -952,20 +967,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function resetJewelryCheckboxesAndQuantities() {
-    jewelryCheckboxesContainer
-      .querySelectorAll('input[type="checkbox"][name="jewelry-type"]')
-      .forEach((checkbox) => {
-        checkbox.checked = false;
-        const type = checkbox.dataset.type;
-        const quantityInput = jewelryCheckboxesContainer.querySelector(
-          `input[type="number"][data-type="${type}"]`
-        );
-        if (quantityInput) {
-          quantityInput.value = "";
-          quantityInput.placeholder = "";
-          quantityInput.disabled = true;
-        }
-      });
+    jewelryCheckboxesContainer.querySelectorAll(".jewelry-option").forEach(option => {
+      option.classList.remove("selected");
+      option.querySelector('input[type="checkbox"]').checked = false;
+
+      const qtyControls = option.querySelector(".quantity-controls");
+      const qtyInput = option.querySelector('input[type="number"]');
+      const qtyDisplay = option.querySelector(".qty-value");
+
+      qtyControls.style.display = "none";
+      qtyInput.value = "1";
+      qtyDisplay.textContent = "1";
+    });
   }
 
   function resetForm() {
@@ -994,20 +1007,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const stoneVirtues = stoneVirtuesInput.value.trim();
 
     const jewelryTypesWithQuantities = Array.from(
-      jewelryCheckboxesContainer.querySelectorAll(
-        'input[type="checkbox"][name="jewelry-type"]:checked'
-      )
-    ).map((checkbox) => {
-      const type = checkbox.dataset.type;
-      const quantityInput = jewelryCheckboxesContainer.querySelector(
-        `input[type="number"][data-type="${type}"]`
-      );
+      jewelryCheckboxesContainer.querySelectorAll('.jewelry-option.selected')
+    ).map((option) => {
+      const type = option.dataset.type;
+      const quantityInput = option.querySelector('input[type="number"]');
       let quantity = 1;
       if (quantityInput) {
-        const parsedValue = parseInt(quantityInput.value, 10);
-        if (!isNaN(parsedValue) && parsedValue >= 1) {
-          quantity = parsedValue;
-        }
+        quantity = parseInt(quantityInput.value, 10) || 1;
       }
       return { type: type, quantity: quantity };
     });
@@ -1640,28 +1646,59 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   addStoneForm.addEventListener("submit", handleFormSubmit);
 
-  jewelryCheckboxesContainer.addEventListener("change", (event) => {
-    if (event.target.matches('input[type="checkbox"][name="jewelry-type"]')) {
-      handleJewelryCheckboxChange(event.target);
-    }
-  });
+  jewelryCheckboxesContainer.addEventListener("click", (event) => {
+    const target = event.target;
 
-  function handleJewelryCheckboxChange(checkbox) {
-    const type = checkbox.dataset.type;
-    const quantityInput = jewelryCheckboxesContainer.querySelector(
-      `input[type="number"][data-type="${type}"]`
-    );
-    if (quantityInput) {
-      quantityInput.disabled = !checkbox.checked;
-      if (checkbox.checked) {
-        quantityInput.value = "";
-        quantityInput.placeholder = DEFAULT_QUANTITY_PLACEHOLDER;
+    // Handle Quantity Buttons
+    if (target.matches(".qty-btn")) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const optionDiv = target.closest(".jewelry-option");
+      const qtyInput = optionDiv.querySelector('input[type="number"]');
+      const qtyDisplay = optionDiv.querySelector(".qty-value");
+      let currentQty = parseInt(qtyInput.value) || 1;
+
+      if (target.classList.contains("plus")) {
+        currentQty++;
+      } else if (target.classList.contains("minus")) {
+        currentQty = Math.max(1, currentQty - 1);
+      }
+
+      qtyInput.value = currentQty;
+      qtyDisplay.textContent = currentQty;
+      return;
+    }
+
+    // Handle Option Selection (Card Click)
+    const optionDiv = target.closest(".jewelry-option");
+    if (optionDiv) {
+      // Toggle logic
+      const isSelected = optionDiv.classList.contains("selected");
+      const checkbox = optionDiv.querySelector('input[type="checkbox"]');
+      const qtyControls = optionDiv.querySelector(".quantity-controls");
+      const qtyInput = optionDiv.querySelector('input[type="number"]');
+      const qtyDisplay = optionDiv.querySelector(".qty-value");
+
+      if (isSelected) {
+        // Deselect
+        optionDiv.classList.remove("selected");
+        checkbox.checked = false;
+        qtyControls.style.display = "none";
+        // Optional: Reset quantity when deselecting? Or keep it? keeping it is friendlier.
       } else {
-        quantityInput.value = "";
-        quantityInput.placeholder = "";
+        // Select
+        optionDiv.classList.add("selected");
+        checkbox.checked = true;
+        qtyControls.style.display = "flex";
+        // Ensure quantity is at least 1 when selecting
+        if (parseInt(qtyInput.value) < 1) {
+          qtyInput.value = "1";
+          qtyDisplay.textContent = "1";
+        }
       }
     }
-  }
+  });
 
   imageDropZone.addEventListener("click", (e) => {
     if (
