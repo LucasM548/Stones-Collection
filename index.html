@@ -1,162 +1,179 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mes Pierres Énergétiques</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="icon" type="image/png" href="images/favicon.png" />
-  </head>
-  <body>
-    <!-- Contrôles en haut à droite -->
-    <div class="top-right-controls">
-      <button id="all-stones-list-btn" title="Afficher toutes les pierres">
-        <img src="images/all-stones-icon.png" alt="Toutes les pierres" />
-      </button>
-      <div id="admin-login-icon" title="Connexion admin/invité">
-        <img id="admin-login-img" src="images/guest.png" alt="Connexion" />
-      </div>
-    </div>
 
-    <!-- Modale de connexion admin -->
-    <div id="admin-login-modal" class="modal" style="display:none;">
-      <div class="modal-content">
-        <span id="close-login-modal" class="close">×</span>
-        <h2>Connexion administrateur</h2>
-        <input type="password" id="admin-password-input" placeholder="Mot de passe admin" autocomplete="current-password" />
-        <button id="admin-login-btn">Se connecter</button>
-        <p id="admin-login-error" class="error-message" style="display:none;color:red;"></p>
-      </div>
-    </div>
-    <!-- Modale de déconnexion admin -->
-    <div id="admin-logout-modal" class="modal" style="display:none;">
-      <div class="modal-content">
-        <span id="close-logout-modal" class="close">×</span>
-        <h2>Déconnexion administrateur</h2>
-        <p>Voulez-vous quitter le mode administrateur ?</p>
-        <button id="admin-logout-btn">Se déconnecter</button>
-      </div>
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mes Pierres Énergétiques</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+</head>
 
-    <!-- Modale pour la liste de toutes les pierres -->
-    <div id="all-stones-modal" class="modal" style="display:none;">
-        <div class="modal-content all-stones-modal-content">
-            <span id="close-all-stones-modal" class="close">×</span>
-            <h2>Toutes Mes Pierres</h2>
-            <div class="all-stones-controls">
-                <input type="text" id="all-stones-search-input" placeholder="Rechercher (nom, chakra, vertus...)" />
-                <div class="all-stones-sort-options">
-                    <span>Trier par:</span>
-                    <button class="sort-btn active" data-sort="name">Nom</button>
-                    <button class="sort-btn" data-sort="chakra">Chakra</button>
-                </div>
-            </div>
-            <ul id="all-stones-global-list">
-                <!-- Les pierres de tous les chakras apparaîtront ici -->
-                <li><em>Chargement des pierres...</em></li>
-            </ul>
+<body>
+  <!-- Contrôles en haut à droite -->
+  <div class="top-right-controls">
+    <button id="all-stones-list-btn" title="Afficher toutes les pierres">
+      <img src="images/all-stones-icon.png" alt="Toutes les pierres" />
+    </button>
+    <div id="admin-login-icon" title="Connexion admin/invité">
+      <img id="admin-login-img" src="images/guest.png" alt="Connexion" />
+    </div>
+  </div>
+
+  <!-- Modale de connexion admin -->
+  <div id="admin-login-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="close-login-modal" class="close">×</span>
+      <h2>Connexion administrateur</h2>
+      <input type="password" id="admin-password-input" placeholder="Mot de passe admin"
+        autocomplete="current-password" />
+      <button id="admin-login-btn">Se connecter</button>
+      <p id="admin-login-error" class="error-message" style="display:none;color:red;"></p>
+    </div>
+  </div>
+  <!-- Modale de déconnexion admin -->
+  <div id="admin-logout-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="close-logout-modal" class="close">×</span>
+      <h2>Déconnexion administrateur</h2>
+      <p>Voulez-vous quitter le mode administrateur ?</p>
+      <button id="admin-logout-btn">Se déconnecter</button>
+    </div>
+  </div>
+
+  <!-- Modale pour la liste de toutes les pierres -->
+  <div id="all-stones-modal" class="modal" style="display:none;">
+    <div class="modal-content all-stones-modal-content">
+      <span id="close-all-stones-modal" class="close">×</span>
+      <h2>Toutes Mes Pierres</h2>
+      <div class="all-stones-controls">
+        <input type="text" id="all-stones-search-input" placeholder="Rechercher (nom, chakra, vertus...)" />
+        <div class="all-stones-sort-options">
+          <span>Trier par:</span>
+          <button class="sort-btn active" data-sort="name">Nom</button>
+          <button class="sort-btn" data-sort="chakra">Chakra</button>
         </div>
+      </div>
+      <ul id="all-stones-global-list">
+        <!-- Les pierres de tous les chakras apparaîtront ici -->
+        <li><em>Chargement des pierres...</em></li>
+      </ul>
     </div>
+  </div>
 
-    <div class="background-glow"></div>
-    <div class="container">
-      <h1>Harmonie des Chakras</h1>
-      <p class="subtitle">Site créé pour <b>Nono</b> la kawaiine 💖</p>
+  <!-- SVG Overlay pour le lien organique -->
+  <svg id="connector-overlay"
+    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: visible;">
+    <g id="connector-group" style="opacity: 0; transition: opacity 0.5s ease;"></g>
+    <defs>
+      <linearGradient id="connector-gradient" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="var(--connector-start-color, #fff)" stop-opacity="0.6" />
+        <stop offset="50%" stop-color="var(--connector-mid-color, #fff)" stop-opacity="0.3" />
+        <stop offset="100%" stop-color="var(--connector-end-color, #fff)" stop-opacity="0.05" />
+      </linearGradient>
+      <filter id="glow-filter" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="2" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+  </svg>
 
-<div class="chakra-svg-container">
-    <svg id="chakra-svg"
-         viewBox="0 0 1000 1461"
-         preserveAspectRatio="xMidYMid meet">
+  <div class="background-glow"></div>
+  <div class="container">
+    <h1>Harmonie des Chakras</h1>
+    <p class="subtitle">Site créé pour <b>Nono</b> la kawaiine 💖</p>
 
-        <image href="images/Chakra.png"
-               x="0" y="0" width="1000" height="1461"
-               preserveAspectRatio="xMidYMid slice" />
+    <div class="chakra-svg-container">
+      <svg id="chakra-svg" viewBox="0 0 1000 1461" preserveAspectRatio="xMidYMid meet">
+
+        <image href="images/Chakra.png" x="0" y="0" width="1000" height="1461" preserveAspectRatio="xMidYMid slice" />
         <!-- Les cercles seront ajoutés ici dynamiquement par script.js -->
-    </svg>
-</div>
-      </div>
-
-      <!-- Panneau d'information (initiallement caché) -->
-      <div class="info-panel" id="info-panel">
-        <button class="close-panel" id="close-panel">×</button>
-        <h2 id="panel-chakra-name">Infos Chakra</h2>
-        <nav class="tabs">
-          <button class="tab-link active" data-tab="tab-general">
-            Infos Générales
-          </button>
-          <button class="tab-link" data-tab="tab-my-stones">Mes pierres</button>
-          <button class="tab-link" data-tab="tab-add-stone">
-            Ajouter une pierre
-          </button>
-        </nav>
-
-        <div class="tab-content active" id="tab-general">
-            <!--  Informations générales sur le chakra sélectionné apparaîtront ici -->
-        </div>
-
-        <div class="tab-content" id="tab-my-stones">
-          <h3>Ma collection de pierres associées</h3>
-          <ul id="stone-list">
-            <!-- Les pierres ajoutées apparaîtront ici -->
-            <li><em>Aucune pierre ajoutée pour le moment.</em></li>
-          </ul>
-        </div>
-
-        <div class="tab-content" id="tab-add-stone">
-          <h3>Ajouter une nouvelle pierre</h3>
-          <form id="add-stone-form">
-            <div class="form-group">
-              <label for="stone-name">Nom de la pierre :</label>
-              <input type="text" id="stone-name" required />
-            </div>
-            <div class="form-group">
-              <label for="stone-virtues">Vertus principales :</label>
-              <textarea id="stone-virtues" rows="3" required></textarea>
-            </div>
-            <div class="form-group">
-              <label for="stone-purification">Type de purification :</label>
-              <input type="text" id="stone-purification" placeholder="Ex : Eau distillée, Sel indirect, Fumigation..." />
-            </div>
-            <div class="form-group">
-              <label for="stone-recharge">Type de rechargement :</label>
-              <input type="text" id="stone-recharge" placeholder="Ex : Lumière solaire, Lune, Amas de quartz..."/>
-            </div>
-            <div class="form-group">
-              <label>Type(s) de bijou(x) :</label>
-              <div class="checkbox-group" id="jewelry-type-group">
-                <!-- This will be populated by script.js -->
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="stoneImage">Image : (facultatif)</label>
-              <div class="image-upload-container">
-                <input type="file" id="stoneImageInput" accept="image/*" style="display: none;">
-                <div id="imageDropZone" class="image-drop-zone">
-                    <span class="drop-zone-prompt">Cliquez ou glissez une image ici</span>
-                    <img id="imagePreview" src="#" alt="Aperçu de l'image" class="image-preview">
-                </div>
-                <button type="button" id="removeImageBtn" class="remove-image-btn" style="display: none;">×</button>
-              </div>
-            </div>
-            <button type="submit">Ajouter la pierre</button>
-          </form>
-        </div>
-      </div>
+      </svg>
     </div>
-    <!-- Modale de Confirmation de Suppression -->
-    <div id="confirmation-modal" class="modal-overlay" style="display: none">
-      <div class="modal-content">
-        <h2>Confirmation</h2>
-        <p>Êtes-vous sûr de vouloir supprimer cette pierre ?</p>
-        <div class="modal-buttons">
-          <button id="confirm-delete-btn" class="btn-danger">Confirmer</button>
-          <button id="cancel-delete-btn" class="btn-secondary">Annuler</button>
-        </div>
-      </div>
+  </div>
+
+  <!-- Panneau d'information (initiallement caché) -->
+  <div class="info-panel" id="info-panel">
+    <button class="close-panel" id="close-panel">×</button>
+    <h2 id="panel-chakra-name">Infos Chakra</h2>
+    <nav class="tabs">
+      <button class="tab-link active" data-tab="tab-general">
+        Infos Générales
+      </button>
+      <button class="tab-link" data-tab="tab-my-stones">Mes pierres</button>
+      <button class="tab-link" data-tab="tab-add-stone">
+        Ajouter une pierre
+      </button>
+    </nav>
+
+    <div class="tab-content active" id="tab-general">
+      <!--  Informations générales sur le chakra sélectionné apparaîtront ici -->
     </div>
 
-    <script src="script.js"></script>
-  </body>
+    <div class="tab-content" id="tab-my-stones">
+      <h3>Ma collection de pierres associées</h3>
+      <ul id="stone-list">
+        <!-- Les pierres ajoutées apparaîtront ici -->
+        <li><em>Aucune pierre ajoutée pour le moment.</em></li>
+      </ul>
+    </div>
+
+    <div class="tab-content" id="tab-add-stone">
+      <h3>Ajouter une nouvelle pierre</h3>
+      <form id="add-stone-form">
+        <div class="form-group">
+          <label for="stone-name">Nom de la pierre :</label>
+          <input type="text" id="stone-name" required />
+        </div>
+        <div class="form-group">
+          <label for="stone-virtues">Vertus principales :</label>
+          <textarea id="stone-virtues" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="stone-purification">Type de purification :</label>
+          <input type="text" id="stone-purification" placeholder="Ex : Eau distillée, Sel indirect, Fumigation..." />
+        </div>
+        <div class="form-group">
+          <label for="stone-recharge">Type de rechargement :</label>
+          <input type="text" id="stone-recharge" placeholder="Ex : Lumière solaire, Lune, Amas de quartz..." />
+        </div>
+        <div class="form-group">
+          <label>Type(s) de bijou(x) :</label>
+          <div class="checkbox-group" id="jewelry-type-group">
+            <!-- This will be populated by script.js -->
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="stoneImage">Image : (facultatif)</label>
+          <div class="image-upload-container">
+            <input type="file" id="stoneImageInput" accept="image/*" style="display: none;">
+            <div id="imageDropZone" class="image-drop-zone">
+              <span class="drop-zone-prompt">Cliquez ou glissez une image ici</span>
+              <img id="imagePreview" src="#" alt="Aperçu de l'image" class="image-preview">
+            </div>
+            <button type="button" id="removeImageBtn" class="remove-image-btn" style="display: none;">×</button>
+          </div>
+        </div>
+        <button type="submit">Ajouter la pierre</button>
+      </form>
+    </div>
+  </div>
+  </div>
+  <!-- Modale de Confirmation de Suppression -->
+  <div id="confirmation-modal" class="modal-overlay" style="display: none">
+    <div class="modal-content">
+      <h2>Confirmation</h2>
+      <p>Êtes-vous sûr de vouloir supprimer cette pierre ?</p>
+      <div class="modal-buttons">
+        <button id="confirm-delete-btn" class="btn-danger">Confirmer</button>
+        <button id="cancel-delete-btn" class="btn-secondary">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
 </html>

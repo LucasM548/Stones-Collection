@@ -523,6 +523,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     displayStonesForChakra(chakraId);
     activateTab(document.querySelector('.tab-link[data-tab="tab-general"]'));
     infoPanel.classList.add("visible");
+
+    // Démarrer la mise à jour du connecteur
+    startConnectorUpdate(chakraId);
+
     updateAdminUI();
   }
 
@@ -532,10 +536,138 @@ document.addEventListener("DOMContentLoaded", async () => {
       .forEach((el) => el.classList.remove("selected"));
     infoPanel.classList.remove("visible");
     infoPanel.style.removeProperty("--active-chakra-color");
+
+    // Arrêter et cacher le connecteur
+    stopConnectorUpdate();
+
     currentChakraId = null;
     if (isEditing) {
       resetForm();
     }
+  }
+
+  // ==========================================================================
+  // LOGIQUE DU LIEN ORGANIQUE (CONNECTOR) - VERSION MULTI-BRINS
+  // ==========================================================================
+  const connectorGroup = document.getElementById("connector-group");
+  const connectorGradient = document.getElementById("connector-gradient");
+  let connectorAnimationId = null;
+
+  // Configuration des brins
+  const STRAND_COUNT = 5;
+  const STRAND_AMPLITUDE = 15; // Amplitude de l'ondulation
+  const STRAND_VARIATION = 20; // Variation de la zone de couverture
+
+  // On pré-génère les éléments path si besoin ou on les crée à la volée
+  function ensureConnectorStrands() {
+    if (!connectorGroup) return;
+    // Nettoyer si nombre différent (ou vide)
+    if (connectorGroup.children.length !== STRAND_COUNT) {
+      connectorGroup.innerHTML = '';
+      for (let i = 0; i < STRAND_COUNT; i++) {
+        const path = document.createElementNS(svgNS, "path");
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", "url(#connector-gradient)");
+        // Brins centraux plus épais, extérieurs plus fins
+        const width = i === Math.floor(STRAND_COUNT / 2) ? 2.5 : 1 + Math.random();
+        path.setAttribute("stroke-width", width);
+        path.setAttribute("stroke-linecap", "round");
+        path.style.opacity = (0.4 + Math.random() * 0.6).toFixed(2);
+        // Décalage de phase aléatoire pour chaque brin pour l'animation
+        path.dataset.phase = Math.random() * Math.PI * 2;
+        path.dataset.speed = 0.002 + Math.random() * 0.003;
+        connectorGroup.appendChild(path);
+      }
+    }
+  }
+
+  function startConnectorUpdate(chakraId) {
+    if (connectorAnimationId) cancelAnimationFrame(connectorAnimationId);
+
+    const chakraEl = document.getElementById(chakraId);
+    if (!connectorGroup) return;
+
+    ensureConnectorStrands();
+
+    // Mettre à jour la couleur du gradient
+    const color = getChakraColorById(chakraId);
+    if (connectorGradient) {
+      const stops = connectorGradient.querySelectorAll("stop");
+      if (stops.length >= 2) {
+        connectorGroup.style.setProperty("--connector-start-color", color);
+        connectorGroup.style.setProperty("--connector-mid-color", color);
+        connectorGroup.style.setProperty("--connector-end-color", color);
+
+        // Mise à jour explicite des attributs stop-color pour compatibilité
+        stops[0].setAttribute("stop-color", color);
+        // S'il y a un stop intermédiaire
+        if (stops.length > 2) stops[1].setAttribute("stop-color", color);
+        stops[stops.length - 1].setAttribute("stop-color", color);
+      }
+    }
+
+    connectorGroup.style.opacity = "1";
+
+    function update(time) {
+      // Check for mobile or if panel is hidden
+      if (window.innerWidth <= 768 || !infoPanel.classList.contains("visible")) {
+        stopConnectorUpdate();
+        return;
+      }
+      drawMultiStrandConnector(chakraEl, infoPanel, time);
+      connectorAnimationId = requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  function stopConnectorUpdate() {
+    if (connectorAnimationId) cancelAnimationFrame(connectorAnimationId);
+    connectorAnimationId = null;
+    if (connectorGroup) connectorGroup.style.opacity = "0";
+  }
+
+  function drawMultiStrandConnector(startEl, endEl, time) {
+    const startRect = startEl.getBoundingClientRect();
+    const endRect = endEl.getBoundingClientRect();
+
+    // Point de départ : Centre du chakra
+    const startX = startRect.left + startRect.width / 2;
+    const startY = startRect.top + startRect.height / 2;
+
+    // Point d'arrivée : Milieu gauche du panneau
+    // On connecte visuellement au côté gauche
+    const endX = endRect.left + 30; // Un peu à l'intérieur
+    const endYBase = endRect.top + endRect.height / 3;
+
+    const dist = Math.abs(endX - startX);
+
+    // Control points de base pour la courbe principale
+    const cp1X = startX + dist * 0.5;
+    const cp1Y = startY;
+    const cp2X = endX - dist * 0.4;
+    const cp2Y = endYBase;
+
+    // Dessiner chaque brin
+    Array.from(connectorGroup.children).forEach((path, i) => {
+      // Facteurs de variation
+      const phase = parseFloat(path.dataset.phase) + time * parseFloat(path.dataset.speed);
+      const offsetIndex = i - Math.floor(STRAND_COUNT / 2); // -2, -1, 0, 1, 2
+
+      // Ondulation
+      const waveY1 = Math.sin(phase) * STRAND_AMPLITUDE;
+      const waveY2 = Math.cos(phase * 0.7) * STRAND_AMPLITUDE;
+
+      // Variation de dispersion aux points de contrôle
+      // On disperse plus au milieu (CPs) qu'aux extrémités (Start/End)
+      const cp1YMod = cp1Y + (offsetIndex * STRAND_VARIATION) + waveY1;
+      const cp2YMod = cp2Y + (offsetIndex * STRAND_VARIATION * 0.5) + waveY2;
+
+      // Point d'arrivée légèrement dispersé aussi pour ne pas qu'ils se superposent tous parfaitement
+      const endYMod = endYBase + (offsetIndex * 5);
+
+      const pathData = `M ${startX},${startY} C ${cp1X},${cp1YMod} ${cp2X},${cp2YMod} ${endX},${endYMod}`;
+      path.setAttribute("d", pathData);
+    });
   }
 
   function activateTab(selectedTab) {
@@ -1293,8 +1425,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     allStonesGlobalList.innerHTML = "";
     if (flatStoneList.length === 0) {
       allStonesGlobalList.innerHTML = `<li><em>${searchTerm
-          ? "Aucune pierre ne correspond à votre recherche."
-          : "Aucune pierre dans la collection."
+        ? "Aucune pierre ne correspond à votre recherche."
+        : "Aucune pierre dans la collection."
         }</em></li>`;
       return;
     }
