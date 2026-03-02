@@ -1,10 +1,4 @@
-/**
- * =============================================================================
- * VARIABLES GLOBALES
- * =============================================================================
- */
 :root {
-  /* Couleurs des Chakras */
   --chakra-color-root: #ff4d4d;
   --chakra-color-sacral: #ff9a4d;
   --chakra-color-solar-plexus: #ffdd4d;
@@ -14,135 +8,148 @@
   --chakra-color-crown: #8750f6;
   --chakra-color-secondary: #000000;
 
-  /* Couleurs Générales */
   --color-text-light: #f0f0f0;
-  --color-text-highlight: #e0e0ff;
-  --color-text-muted: #c0c0f0;
-  --color-background-start: #0f0c29;
-  --color-background-mid: #302b63;
-  --color-background-end: #24243e;
-  --color-glow: rgba(76, 76, 179, 0.3);
-  --color-panel-bg: rgba(48, 43, 99, 0.9);
-  --color-panel-border: rgba(255, 255, 255, 0.2);
-  --color-input-bg: rgba(0, 0, 0, 0.2);
-  --color-input-border: rgba(255, 255, 255, 0.3);
-  --color-input-focus: #ff77ff;
-  --color-input-focus-bg: rgba(188, 125, 255, 0.2);
+  --color-text-highlight: #ffffff;
+  --color-text-muted: #b0b0d0;
+  --color-background-start: #0a0a1a;
+  --color-background-mid: #1a1a3a;
+  --color-background-end: #12122a;
+  --color-glow: rgba(140, 77, 255, 0.4);
+  --color-panel-bg: rgba(30, 25, 60, 0.92);
+  --color-panel-border: rgba(255, 255, 255, 0.15);
+  --color-input-bg: rgba(0, 0, 0, 0.3);
+  --color-input-border: rgba(255, 255, 255, 0.2);
+  --color-input-focus: #d55fff;
+  --color-input-focus-bg: rgba(213, 95, 255, 0.15);
   --color-primary-action: #8c4dff;
-  --color-primary-action-hover: #a36eff;
-  --color-danger: var(--chakra-color-root);
-  --color-danger-hover: #e60000;
-  --color-secondary: #6c757d;
-  --color-secondary-hover: #5a6268;
-  --color-warning: #f0ad4e;
+  --color-primary-action-hover: #b366ff;
+  --color-danger: #ff4757;
+  --color-danger-hover: #ff6b81;
+  --color-secondary: #5a6275;
+  --color-secondary-hover: #6c7590;
+  --color-warning: #ffa502;
 
-  /* Dimensions & Autres */
-  --panel-max-width: 450px;
-  --border-radius-standard: 5px;
-  --border-radius-large: 15px;
+  --panel-max-width: 420px;
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 20px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
 }
 
-/**
- * =============================================================================
- * RÉINITIALISATION ET STYLES DE BASE
- * =============================================================================
- */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+:focus-visible {
+  outline: 2px solid var(--color-input-focus);
+  outline-offset: 2px;
+}
+
 body {
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg,
-      var(--color-background-start),
-      var(--color-background-mid),
-      var(--color-background-end));
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(145deg, var(--color-background-start), var(--color-background-mid) 50%, var(--color-background-end));
   color: var(--color-text-light);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: var(--spacing-md);
   overflow-x: hidden;
   position: relative;
+  -webkit-font-smoothing: antialiased;
 }
 
-/**
- * =============================================================================
- * LAYOUT PRINCIPAL & ARRIÈRE-PLAN
- * =============================================================================
- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--color-primary-action), #6b2fd6);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--color-primary-action-hover), #8c4dff);
+}
+
+.background-glow {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 70vw;
+  height: 70vw;
+  max-width: 900px;
+  max-height: 900px;
+  background: radial-gradient(ellipse at center, var(--color-glow), rgba(140, 77, 255, 0.1) 40%, rgba(76, 76, 179, 0) 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(60px);
+  z-index: 0;
+  pointer-events: none;
+  animation: glowPulse 8s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
 .container {
   text-align: center;
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 1200px;
+  max-width: 700px;
 }
 
-.background-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 60vw;
-  height: 60vw;
-  max-width: 800px;
-  max-height: 800px;
-  background: radial-gradient(ellipse at center,
-      var(--color-glow),
-      rgba(76, 76, 179, 0) 70%);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  filter: blur(50px);
-  z-index: 0;
-  pointer-events: none;
-}
-
-/**
- * =============================================================================
- * TYPOGRAPHIE
- * =============================================================================
- */
 h1 {
-  font-size: 2.8em;
-  margin-bottom: 10px;
+  font-size: 2.5em;
+  margin-bottom: var(--spacing-xs);
   color: var(--color-text-highlight);
-  text-shadow: 0 0 15px rgba(180, 180, 255, 0.7);
+  text-shadow: 0 0 30px rgba(180, 180, 255, 0.5), 0 0 60px rgba(140, 77, 255, 0.3);
+  letter-spacing: 2px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, #d4b8ff 50%, #fff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
   font-size: 1.1em;
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-lg);
   color: var(--color-text-muted);
+  font-weight: 300;
+  letter-spacing: 1px;
 }
 
-/**
- * =============================================================================
- * REPRÉSENTATION DES CHAKRAS (Conteneur & Éléments)
- * =============================================================================
- */
 .chakra-svg-container {
   display: block;
-  margin: 0 auto 30px auto;
-  width: 80%;
-  max-width: 600px;
-  mask-image: radial-gradient(ellipse closest-side,
-      black 70%,
-      transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse closest-side,
-      black 70%,
-      transparent 100%);
-  transition: opacity 0.3s ease;
+  margin: 0 auto var(--spacing-md) auto;
+  width: 75%;
+  max-width: 500px;
+  mask-image: radial-gradient(ellipse closest-side, black 70%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse closest-side, black 70%, transparent 100%);
+  transition: all 0.5s ease;
+  filter: drop-shadow(0 0 20px rgba(140, 77, 255, 0.3));
 }
 
 #chakra-svg {
   display: block;
   width: 100%;
   height: auto;
+  filter: drop-shadow(0 0 15px rgba(140, 77, 255, 0.4));
 }
 
 .chakra-svg-stone {
@@ -153,29 +160,18 @@ h1 {
   position: absolute;
 }
 
-
-.chakra-svg-stone.selected:hover,
-.chakra-svg-stone.selected:focus-visible {
-  box-shadow: 0 0 0 6px var(--stone-color, 0.3),
-    0 0 16px 6px var(--stone-color, 0.25);
-  filter: drop-shadow(0 0 32px var(--stone-color)) drop-shadow(0 0 16px var(--stone-color));
-}
-
 .chakra-svg-stone:hover,
 .chakra-svg-stone:focus-visible {
-  filter: drop-shadow(0 0 24px var(--stone-color)) drop-shadow(0 0 12px var(--stone-color));
-  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), 0 0 0 8px var(--stone-color);
+  filter: drop-shadow(0 0 15px var(--stone-color)) drop-shadow(0 0 8px var(--stone-color));
   fill-opacity: 0.8;
 }
 
 .chakra-svg-stone.selected {
-  filter: drop-shadow(0 0 15px var(--stone-color)) drop-shadow(0 0 30px var(--stone-color));
+  filter: drop-shadow(0 0 10px var(--stone-color)) drop-shadow(0 0 20px var(--stone-color));
   stroke: white;
-  stroke-width: 3px;
-  stroke-opacity: 0.8;
-
+  stroke-width: 2px;
+  stroke-opacity: 0.6;
   animation: selected-pulse 3s infinite ease-in-out;
-  fill-opacity: 1;
   fill-opacity: 1;
   z-index: 10;
 }
@@ -187,50 +183,89 @@ h1 {
 }
 
 @keyframes selected-pulse {
-
-  0%,
-  100% {
-    filter: drop-shadow(0 0 15px var(--stone-color)) drop-shadow(0 0 40px var(--stone-color));
-    stroke-width: 3px;
-    r: 40;
-    /* Rayon de base */
-  }
-
-  50% {
-    filter: drop-shadow(0 0 25px var(--stone-color)) drop-shadow(0 0 60px var(--stone-color));
-    stroke-width: 5px;
-    r: 43;
-    /* Légère expansion */
-  }
+  0%, 100% { filter: drop-shadow(0 0 10px var(--stone-color)) drop-shadow(0 0 25px var(--stone-color)); stroke-width: 2px; }
+  50% { filter: drop-shadow(0 0 15px var(--stone-color)) drop-shadow(0 0 35px var(--stone-color)); stroke-width: 3px; }
 }
 
-.chakra-svg-stone {
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transform-origin: center;
+.top-right-controls {
+  position: fixed;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
-/**
- * =============================================================================
- * PANNEAU D'INFORMATION (Info Panel)
- * =============================================================================
- */
+#all-stones-list-btn {
+  background: var(--color-panel-bg);
+  border: 1px solid var(--color-panel-border);
+  color: var(--color-text-light);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+#all-stones-list-btn img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+#all-stones-list-btn:hover {
+  background-color: var(--color-primary-action-hover);
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(140, 77, 255, 0.4);
+}
+
+#all-stones-list-btn:active {
+  transform: scale(0.95);
+}
+
+#admin-login-icon {
+  background: var(--color-panel-bg);
+  border-radius: 50%;
+  padding: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+#admin-login-icon:hover {
+  box-shadow: 0 4px 20px rgba(140, 77, 255, 0.4);
+  background: var(--color-primary-action-hover);
+}
+
+#admin-login-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+}
+
 .info-panel {
   position: fixed;
   top: 50%;
-  right: calc(-1 * max(var(--panel-max-width), 90%));
+  right: -450px;
   transform: translateY(-50%);
   width: 90%;
   max-width: var(--panel-max-width);
   max-height: 85vh;
   overflow-y: auto;
   background: var(--color-panel-bg);
-  backdrop-filter: blur(10px);
-  border-radius: var(--border-radius-large);
-  padding: 25px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
-  transition: right 0.5s ease-in-out, bottom 0.4s ease-in-out,
-    opacity 0.3s ease-in-out;
-  /* Ajout transition bottom et opacity */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(140, 77, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1), bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10;
   color: var(--color-text-light);
   border: 1px solid var(--color-panel-border);
@@ -243,80 +278,95 @@ h1 {
 }
 
 .info-panel::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .info-panel::-webkit-scrollbar-track {
   background: rgba(48, 43, 99, 0.5);
-  border-radius: 10px;
 }
 
 .info-panel::-webkit-scrollbar-thumb {
   background-color: var(--color-primary-action);
   border-radius: 10px;
-  border: 2px solid rgba(48, 43, 99, 0.5);
-}
-
-.info-panel::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-primary-action-hover);
 }
 
 .info-panel h2 {
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-md);
   color: var(--color-text-highlight);
   text-align: center;
-  font-size: 1.6em;
+  font-size: 1.5em;
+  font-weight: 600;
+  text-shadow: 0 0 20px rgba(180, 180, 255, 0.3);
 }
 
 .close-panel {
   position: absolute;
-  top: 10px;
+  top: 12px;
   right: 15px;
-  background: none;
+  background: rgba(255, 255, 255, 0.05);
   border: none;
   color: var(--color-text-light);
-  font-size: 2em;
+  font-size: 1.8em;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
   line-height: 1;
-  text-align: center;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .close-panel:hover {
   color: var(--color-input-focus);
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(90deg);
 }
 
 .tabs {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-md);
   border-bottom: 1px solid var(--color-panel-border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .tab-link {
-  padding: 10px 15px;
+  padding: 10px 14px;
   cursor: pointer;
   background: none;
   border: none;
   color: var(--color-text-muted);
-  font-size: 1em;
-  transition: color 0.3s ease, border-bottom-color 0.3s ease;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: all 0.3s ease;
   border-bottom: 3px solid transparent;
   margin-bottom: -1px;
+  border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+  white-space: nowrap;
 }
 
 .tab-link:hover {
   color: var(--color-text-light);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .tab-link.active {
   color: var(--active-chakra-color, var(--color-text-light));
   border-bottom-color: var(--active-chakra-color, var(--color-text-light));
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .tab-content {
   display: none;
-  animation: fadeIn 0.5s ease;
+  animation: fadeIn 0.3s ease;
 }
 
 .tab-content.active {
@@ -324,124 +374,140 @@ h1 {
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/**
- * =============================================================================
- * FORMULAIRE D'AJOUT DE PIERRE
- * =============================================================================
- */
+#tab-general h3 {
+  color: var(--color-text-highlight);
+  font-size: 1.2em;
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-panel-border);
+  font-weight: 600;
+}
+
+#tab-general p {
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.6;
+  color: var(--color-text-light);
+}
+
+#tab-general p strong {
+  color: var(--color-text-highlight);
+  font-weight: 600;
+}
+
+#tab-my-stones h3 {
+  color: var(--color-text-highlight);
+  font-size: 1.1em;
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-panel-border);
+  font-weight: 600;
+}
+
 #add-stone-form .form-group {
-  margin-bottom: 15px;
+  margin-bottom: var(--spacing-md);
   text-align: left;
 }
 
 #add-stone-form label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   color: var(--color-text-muted);
-  font-weight: 400;
+  font-weight: 500;
+  font-size: 0.9em;
 }
 
 #add-stone-form input[type="text"],
-#add-stone-form textarea,
-#add-stone-form select {
+#add-stone-form textarea {
   width: 100%;
-  padding: 10px;
+  padding: 10px 12px;
   border: 1px solid var(--color-input-border);
-  border-radius: var(--border-radius-standard);
+  border-radius: var(--border-radius-sm);
   background: var(--color-input-bg);
   color: var(--color-text-light);
-  font-family: "Poppins", sans-serif;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: inherit;
+  transition: all 0.3s ease;
 }
 
 #add-stone-form input[type="text"]:focus,
-#add-stone-form textarea:focus,
-#add-stone-form select:focus {
+#add-stone-form textarea:focus {
   outline: none;
   border-color: var(--color-input-focus);
-  box-shadow: 0 0 8px rgba(255, 119, 255, 0.5);
+  box-shadow: 0 0 12px rgba(255, 119, 255, 0.4);
+  background: var(--color-input-focus-bg);
 }
 
 #add-stone-form textarea {
-  min-height: 60px;
-  max-height: 200px;
+  min-height: 70px;
+  max-height: 150px;
   resize: vertical;
 }
 
 #add-stone-form button[type="submit"] {
-  background-color: var(--color-primary-action);
+  background: linear-gradient(135deg, var(--color-primary-action), #6b2fd6);
   color: white;
   padding: 12px 20px;
   border: none;
-  border-radius: var(--border-radius-standard);
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
   font-size: 1em;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-weight: 600;
+  transition: all 0.3s ease;
   display: block;
   width: 100%;
-  margin-top: 10px;
+  margin-top: var(--spacing-md);
+  box-shadow: 0 4px 15px rgba(140, 77, 255, 0.3);
 }
 
 #add-stone-form button[type="submit"]:hover {
-  background-color: var(--color-primary-action-hover);
+  background: linear-gradient(135deg, var(--color-primary-action-hover), #7c4dff);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(140, 77, 255, 0.4);
 }
 
-/**
- * =============================================================================
- * ZONE DE DÉPÔT D'IMAGE (Image Drop Zone)
- * =============================================================================
- */
 .image-upload-container {
   position: relative;
-  margin-top: 10px;
-  margin-bottom: 15px;
+  margin-top: var(--spacing-sm);
 }
 
 .image-drop-zone {
   border: 2px dashed var(--color-primary-action);
-  border-radius: var(--border-radius-standard);
+  border-radius: var(--border-radius-sm);
   padding: 20px;
   text-align: center;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-  min-height: 100px;
+  transition: all 0.3s ease;
+  min-height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .image-drop-zone:hover {
-  background-color: rgba(140, 77, 255, 0.1);
+  background: rgba(140, 77, 255, 0.1);
   border-color: var(--color-primary-action-hover);
+}
+
+.image-drop-zone.drag-over {
+  background: rgba(140, 77, 255, 0.2);
+  border-color: var(--color-input-focus);
 }
 
 .drop-zone-prompt {
   color: var(--color-primary-action);
-  margin-bottom: 10px;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
+  font-size: 0.9em;
 }
 
 .image-preview {
   display: none;
   max-width: 100%;
-  max-height: 150px;
+  max-height: 120px;
   object-fit: cover;
-  border-radius: var(--border-radius-standard);
-  margin-top: 10px;
+  border-radius: var(--border-radius-sm);
 }
 
 .image-drop-zone.has-image {
@@ -450,19 +516,12 @@ h1 {
   min-height: auto;
 }
 
-.image-drop-zone.has-image:hover {
-  background-color: transparent;
-}
-
 .image-drop-zone.has-image .drop-zone-prompt {
   display: none;
 }
 
 .image-drop-zone.has-image .image-preview {
   display: block;
-  margin: 0;
-  width: 100%;
-  max-height: 180px;
 }
 
 .remove-image-btn {
@@ -480,7 +539,7 @@ h1 {
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease;
   z-index: 3;
   display: none;
 }
@@ -491,119 +550,150 @@ h1 {
 
 .remove-image-btn:hover {
   background-color: var(--color-danger);
-  transform: scale(1.1);
 }
 
-#stone-image-input {
-  display: none;
+.jewelry-type-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
 }
 
-/**
- * =============================================================================
- * LISTE DES PIERRES (Commune pour panneau et modale globale)
- * =============================================================================
- */
-#stone-list,
-#all-stones-global-list {
+.jewelry-option {
+  background: var(--color-input-bg);
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--border-radius-md);
+  padding: 10px 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.25s ease;
+  min-height: 70px;
+}
+
+.jewelry-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.jewelry-option.selected {
+  background: linear-gradient(135deg, rgba(140, 77, 255, 0.3), rgba(107, 47, 214, 0.3));
+  border-color: var(--active-chakra-color, var(--color-primary-action));
+  box-shadow: 0 0 15px rgba(140, 77, 255, 0.3);
+}
+
+.jewelry-option .label {
+  font-weight: 500;
+  font-size: 0.85em;
+  pointer-events: none;
+}
+
+.jewelry-option .quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 3px 6px;
+  border-radius: 20px;
+}
+
+.jewelry-option .qty-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+  font-size: 12px;
+}
+
+.jewelry-option .qty-btn:hover {
+  background: var(--active-chakra-color, var(--color-primary-action));
+}
+
+.jewelry-option .qty-value {
+  font-size: 0.85em;
+  font-weight: bold;
+  min-width: 12px;
+}
+
+#stone-list, #all-stones-global-list {
   list-style: none;
   padding: 0;
   text-align: left;
-  max-height: 80%;
+  max-height: 50vh;
   overflow-y: auto;
-  margin-top: 20px;
-
+  margin-top: var(--spacing-sm);
   scrollbar-width: thin;
   scrollbar-color: var(--color-primary-action) rgba(48, 43, 99, 0.5);
 }
 
-#stone-list {
-  max-height: 80%;
-  margin-top: 20px;
-}
-
-#all-stones-global-list {
-  flex-grow: 1;
-}
-
-#stone-list::-webkit-scrollbar,
-#all-stones-global-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-#stone-list::-webkit-scrollbar-track,
-#all-stones-global-list::-webkit-scrollbar-track {
-  background: rgba(48, 43, 99, 0.5);
-  border-radius: 10px;
-}
-
-#stone-list::-webkit-scrollbar-thumb,
-#all-stones-global-list::-webkit-scrollbar-thumb {
-  background-color: var(--color-primary-action);
-  border-radius: 10px;
-}
-
-#stone-list::-webkit-scrollbar-thumb:hover,
-#all-stones-global-list::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-primary-action-hover);
-}
-
-#stone-list li,
-#all-stones-global-list li {
+#stone-list li, #all-stones-global-list li {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  background: rgba(0, 0, 0, 0.1);
-  padding: 12px 15px;
-  margin-bottom: 12px;
-  border-radius: var(--border-radius-standard);
+  gap: var(--spacing-sm);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+  padding: 12px;
+  margin-bottom: var(--spacing-sm);
+  border-radius: var(--border-radius-md);
   border-left: 4px solid var(--item-chakra-color, var(--color-panel-border));
-  transition: background-color 0.3s ease-out, box-shadow 0.3s ease-out,
-    border-left-color 0.3s ease-out;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
   cursor: default;
+  animation: listItemFadeIn 0.3s ease backwards;
 }
 
-#all-stones-global-list li:not(:has(button:hover)) {
-  cursor: pointer;
+@keyframes listItemFadeIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+#stone-list li:hover, #all-stones-global-list li:hover {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.15) 100%);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+#stone-list li.highlighted-stone, #all-stones-global-list li.highlighted-stone {
+  background-color: var(--color-input-focus-bg);
+  box-shadow: 0 0 10px 2px var(--color-input-focus);
+  border-left-color: var(--color-input-focus);
+}
+
+#stone-list li em:only-child, #all-stones-global-list li em:only-child {
+  color: var(--color-text-muted);
+  font-style: italic;
+  width: 100%;
+  text-align: center;
+  padding: var(--spacing-md) 0;
+  cursor: default;
+  border-left: 4px solid transparent;
+  background: transparent;
 }
 
 .stone-info {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: var(--spacing-sm);
   flex-grow: 1;
+  width: 100%;
 }
 
 .stone-list-image {
-  width: 110px;
-  height: 110px;
+  width: 80px;
+  height: 80px;
   object-fit: cover;
-  border-radius: var(--border-radius-standard);
+  border-radius: var(--border-radius-sm);
   flex-shrink: 0;
   border: 2px solid var(--item-chakra-color, rgba(255, 255, 255, 0.1));
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-
-.stone-buttons {
-  margin-left: auto;
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-  align-self: center;
-}
-
-#stone-list li:hover,
-#all-stones-global-list li:hover {
-  background: rgba(0, 0, 0, 0.2);
-}
-
-#stone-list li.highlighted-stone,
-#stone-list li.highlighted-stone:hover,
-#all-stones-global-list li.highlighted-stone,
-#all-stones-global-list li.highlighted-stone:hover {
-  background-color: var(--color-input-focus-bg);
-  box-shadow: 0 0 10px 2px var(--color-input-focus);
-  border-left-color: var(--color-input-focus);
 }
 
 .stone-text {
@@ -616,109 +706,86 @@ h1 {
   display: block;
   margin-bottom: 3px;
   font-size: 1.05em;
+  font-weight: 600;
 }
 
 .stone-text em {
   color: var(--color-text-muted);
+  font-size: 0.8em;
+  font-style: normal;
+}
+
+.stone-text p {
+  margin: 3px 0;
   font-size: 0.85em;
-  margin-right: 5px;
-}
-
-.stone-text br {
-  margin-bottom: 2px;
-  display: block;
-  content: "";
-}
-
-.stone-list-chakra-info {
-  font-size: 0.9em;
-  margin-bottom: 5px;
-  color: var(--color-text-muted);
+  line-height: 1.4;
+  color: var(--color-text-light);
 }
 
 .stone-chakra-badge {
-  padding: 3px 7px;
-  border-radius: var(--border-radius-standard);
+  padding: 2px 6px;
+  border-radius: var(--border-radius-sm);
   font-weight: 500;
-  font-size: 0.9em;
-  margin-left: 5px;
+  font-size: 0.8em;
+  margin-left: 4px;
+}
+
+.stone-buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  align-self: center;
 }
 
 .stone-buttons button {
   background: none;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   cursor: pointer;
-  padding: 5px;
+  padding: 4px;
   line-height: 1;
-  border-radius: var(--border-radius-standard);
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .stone-buttons button:active {
   transform: scale(0.9);
 }
 
-.edit-stone-btn,
-.edit-global-stone-btn {
+.edit-stone-btn, .edit-global-stone-btn {
   color: var(--color-warning);
 }
 
-.edit-stone-btn:hover,
-.edit-global-stone-btn:hover {
+.edit-stone-btn:hover, .edit-global-stone-btn:hover {
   background-color: rgba(240, 173, 78, 0.2);
-  color: #ffc107;
 }
 
-.delete-stone-btn,
-.delete-global-stone-btn {
+.delete-stone-btn, .delete-global-stone-btn {
   color: var(--color-danger);
 }
 
-.delete-stone-btn:hover,
-.delete-global-stone-btn:hover {
+.delete-stone-btn:hover, .delete-global-stone-btn:hover {
   background-color: rgba(217, 83, 79, 0.2);
-  color: #ff6b6b;
 }
 
-#stone-list li em:only-child,
-#all-stones-global-list li em:only-child {
-  color: var(--color-text-muted);
-  font-style: italic;
-  width: 100%;
-  text-align: center;
-  padding: 20px 0;
-  cursor: default;
-  border-left: 4px solid transparent;
-  background: transparent;
-}
-
-#stone-list li:hover em:only-child,
-#all-stones-global-list li:hover em:only-child {
-  background-color: transparent;
-}
-
-/**
- * =============================================================================
- * MODALE DE CONFIRMATION ET MODALES GÉNÉRIQUES
- * =============================================================================
- */
 .modal-overlay {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 20;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  padding: var(--spacing-md);
 }
 
-/* Ajout transform pour animation modale */
 .modal-overlay.visible {
   opacity: 1;
   visibility: visible;
@@ -730,228 +797,227 @@ h1 {
   z-index: 20;
   left: 0;
   top: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: rgba(0, 0, 0, 0.6);
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(3px);
+  padding: var(--spacing-md);
 }
 
 .modal.visible {
   display: flex;
+  animation: modalOverlayFadeIn 0.3s ease;
+}
+
+@keyframes modalOverlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-content {
-  background: var(--color-panel-bg);
-  backdrop-filter: blur(5px);
-  padding: 30px;
-  border-radius: var(--border-radius-large);
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(145deg, rgba(40, 35, 80, 0.95), rgba(30, 25, 55, 0.98));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(140, 77, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   text-align: center;
   color: var(--color-text-light);
   border: 1px solid var(--color-panel-border);
-  transform: scale(0.95) translateY(10px);
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  max-width: 90%;
-  width: 400px;
+  max-width: 400px;
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
+  animation: modalScaleIn 0.3s ease;
 }
 
-.modal-overlay.visible .modal-content {
-  transform: scale(1) translateY(0);
+@keyframes modalScaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .modal-content h2 {
   margin-top: 0;
-  margin-bottom: 15px;
+  margin-bottom: var(--spacing-sm);
   color: var(--color-text-highlight);
-  font-size: 1.4em;
+  font-size: 1.3em;
 }
 
 .modal-content p {
-  margin-bottom: 25px;
-  font-size: 1.05em;
+  margin-bottom: var(--spacing-md);
+  font-size: 0.95em;
   line-height: 1.5;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: auto;
-}
-
-.modal-buttons button {
-  padding: 10px 25px;
-  border: none;
-  border-radius: var(--border-radius-standard);
-  cursor: pointer;
-  font-size: 1em;
-  font-weight: 500;
-  transition: background-color 0.3s ease, transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.modal-buttons button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.modal-buttons .btn-danger {
-  background-color: var(--color-danger);
-  color: white;
-}
-
-.modal-buttons .btn-danger:hover {
-  background-color: var(--color-danger-hover);
-}
-
-.modal-buttons .btn-secondary {
-  background-color: var(--color-secondary);
-  color: white;
-}
-
-.modal-buttons .btn-secondary:hover {
-  background-color: var(--color-secondary-hover);
 }
 
 .modal .close {
   position: absolute;
   top: 10px;
-  right: 16px;
+  right: 14px;
   font-size: 28px;
   font-weight: bold;
   color: var(--color-text-muted);
   cursor: pointer;
-  transition: color 0.3s ease, transform 0.2s ease;
-  z-index: 1;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .modal .close:hover {
   color: var(--color-input-focus);
-  transform: scale(1.1);
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: rotate(90deg);
 }
 
-/* ===================== TOP RIGHT CONTROLS ===================== */
-.top-right-controls {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 15;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-#all-stones-list-btn {
-  background: var(--color-panel-bg);
-  border: 1px solid var(--color-panel-border);
-  color: var(--color-text-light);
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  padding: 8px;
-  cursor: pointer;
+.modal-buttons {
   display: flex;
   justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  gap: var(--spacing-sm);
+  margin-top: auto;
 }
 
-#all-stones-list-btn img {
-  width: 31.2px;
-  height: 31.2px;
-}
-
-#all-stones-list-btn:hover {
-  background-color: var(--color-primary-action-hover);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
-  transform: translateY(-1px);
-}
-
-#admin-login-icon {
-  position: relative;
-  top: auto;
-  right: auto;
-  background: var(--color-panel-bg);
-  border-radius: 50%;
-  padding: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s, box-shadow 0.2s;
+.modal-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
-#admin-login-icon:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
-  background: var(--color-primary-action-hover);
+.modal-buttons .btn-danger {
+  background: linear-gradient(135deg, var(--color-danger), #cc0000);
+  color: white;
 }
 
-#admin-login-img {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-  display: block;
+.modal-buttons .btn-danger:hover {
+  background: linear-gradient(135deg, var(--color-danger-hover), #ff0000);
 }
 
-/* ===================== MODAL POUR TOUTES LES PIERRES (Desktop & Tablette) ===================== */
+.modal-buttons .btn-secondary {
+  background: linear-gradient(135deg, var(--color-secondary), #5a6268);
+  color: white;
+}
+
+.modal-buttons .btn-secondary:hover {
+  background: linear-gradient(135deg, var(--color-secondary-hover), #6c757d);
+}
+
+#admin-password-input {
+  width: 100%;
+  padding: 12px;
+  margin: var(--spacing-sm) 0;
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--border-radius-sm);
+  font-size: 1em;
+  background-color: var(--color-input-bg);
+  color: var(--color-text-light);
+  transition: all 0.3s ease;
+}
+
+#admin-password-input:focus {
+  outline: none;
+  border-color: var(--color-input-focus);
+  box-shadow: 0 0 12px rgba(255, 119, 255, 0.4);
+  background-color: var(--color-input-focus-bg);
+}
+
+#admin-login-btn, #admin-logout-btn {
+  padding: 12px 24px;
+  margin-top: var(--spacing-sm);
+  background: linear-gradient(135deg, var(--color-primary-action), #6b2fd6);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(140, 77, 255, 0.3);
+}
+
+#admin-login-btn:hover, #admin-logout-btn:hover {
+  background: linear-gradient(135deg, var(--color-primary-action-hover), #7c4dff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(140, 77, 255, 0.4);
+}
+
+.error-message {
+  color: var(--color-warning);
+  margin-top: var(--spacing-xs);
+  font-size: 0.9em;
+  min-height: 1.2em;
+}
+
 .all-stones-modal-content {
-  width: 90%;
-  max-width: 700px;
-  min-height: 70vh;
-  max-height: 85vh;
-}
-
-.all-stones-modal-content h2 {
-  margin-bottom: 15px;
+  width: 100%;
+  max-width: 650px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .all-stones-controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
   border-bottom: 1px solid var(--color-panel-border);
-  flex-shrink: 0;
-  /* Empêche les contrôles de rétrécir */
 }
 
 #all-stones-search-input {
   flex-grow: 1;
-  padding: 10px;
+  min-width: 150px;
+  padding: 10px 14px;
   border: 1px solid var(--color-input-border);
-  border-radius: var(--border-radius-standard);
+  border-radius: var(--border-radius-sm);
   background: var(--color-input-bg);
   color: var(--color-text-light);
-  font-family: "Poppins", sans-serif;
-  font-size: 1em;
+  font-size: 0.95em;
+  transition: all 0.3s ease;
 }
 
 #all-stones-search-input:focus {
   outline: none;
   border-color: var(--color-input-focus);
-  box-shadow: 0 0 8px var(--color-input-focus);
+  box-shadow: 0 0 15px rgba(213, 95, 255, 0.3);
+  background: var(--color-input-focus-bg);
+}
+
+#all-stones-search-input::placeholder {
+  color: var(--color-text-muted);
 }
 
 .all-stones-sort-options {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: var(--color-text-muted);
+  flex-wrap: wrap;
+}
+
+.all-stones-sort-options span {
+  font-size: 0.85em;
 }
 
 .all-stones-sort-options .sort-btn {
-  padding: 8px 12px;
+  padding: 6px 12px;
   background: var(--color-input-bg);
   color: var(--color-text-light);
   border: 1px solid var(--color-input-border);
-  border-radius: var(--border-radius-standard);
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition: all 0.2s ease;
+  font-size: 0.85em;
 }
 
 .all-stones-sort-options .sort-btn:hover {
@@ -960,137 +1026,127 @@ h1 {
 }
 
 .all-stones-sort-options .sort-btn.active {
-  background-color: var(--color-primary-action-hover);
+  background: linear-gradient(135deg, var(--color-primary-action-hover), #7c4dff);
   border-color: var(--color-primary-action-hover);
-  font-weight: bold;
-}
-
-/* MODAL ADMIN LOGIN */
-#admin-password-input {
-  width: calc(100% - 20px);
-  padding: 12px;
-  margin: 16px 0 8px 0;
-  border: 1px solid var(--color-input-border);
-  border-radius: var(--border-radius-standard);
-  font-size: 1.1em;
-  background-color: var(--color-input-bg);
-  color: var(--color-text-light);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-#admin-password-input:focus {
-  outline: none;
-  border-color: var(--color-input-focus);
-  box-shadow: 0 0 8px var(--color-input-focus);
-}
-
-#admin-login-btn,
-#admin-logout-btn {
-  padding: 12px 25px;
-  margin: 12px 0 0 0;
-  background: var(--color-primary-action);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-standard);
-  font-size: 1em;
   font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease;
+  box-shadow: 0 2px 10px rgba(140, 77, 255, 0.3);
 }
 
-#admin-login-btn:hover,
-#admin-logout-btn:hover {
-  background: var(--color-primary-action-hover);
+#connector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  overflow: visible;
 }
 
-#admin-login-btn:active,
-#admin-logout-btn:active {
-  transform: scale(0.98);
+#connector-group {
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
-.error-message {
-  color: var(--color-warning);
-  margin-top: 6px;
-  font-size: 0.98em;
-  min-height: 1.2em;
-}
-
-/**
- * =============================================================================
- * RESPONSIVE DESIGN (Mobile < 768px et < 480px)
- * =============================================================================
- */
 @media (max-width: 768px) {
   body {
-    padding: 15px;
+    padding: var(--spacing-md);
   }
 
   h1 {
-    font-size: 2.2em;
+    font-size: 2em;
   }
 
   .subtitle {
     font-size: 1em;
-    margin-bottom: 30px;
+    margin-bottom: var(--spacing-md);
   }
 
   .chakra-svg-container {
-    width: 90%;
-    max-width: 450px;
+    width: 85%;
+    max-width: 320px;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .top-right-controls {
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+  }
+
+  #all-stones-list-btn {
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+  }
+
+  #all-stones-list-btn img {
+    width: 28px;
+    height: 28px;
+  }
+
+  #admin-login-icon {
+    padding: 8px;
+  }
+
+  #admin-login-img {
+    width: 34px;
+    height: 34px;
   }
 
   .info-panel {
     width: 100%;
-    max-width: none;
-    right: auto;
+    max-width: 100%;
+    right: 0;
     left: 0;
     top: auto;
-    bottom: -100vh;
-    transform: translateY(0);
-    border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
+    bottom: 0;
+    transform: translateY(100%);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
     max-height: 75vh;
-    padding: 20px 15px;
+    padding: var(--spacing-md);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .info-panel.visible {
-    bottom: 0;
+    transform: translateY(0);
   }
 
   .info-panel h2 {
     font-size: 1.4em;
-    margin-bottom: 15px;
   }
 
   .tab-link {
-    font-size: 0.9em;
-    padding: 8px 10px;
+    font-size: 0.95em;
+    padding: 12px 14px;
+    flex: 1;
+    text-align: center;
   }
 
-  #stone-list {
-    max-height: 300px;
+  #stone-list, #all-stones-global-list {
+    max-height: 45vh;
   }
 
   .all-stones-modal-content {
-    width: 95%;
-    max-width: 95%;
-    min-height: 80vh;
-    max-height: 90vh;
-    padding: 20px 15px;
-  }
-
-  .all-stones-controls {
-    padding-bottom: 10px;
-    margin-bottom: 10px;
+    max-height: 85vh;
+    padding: var(--spacing-md);
   }
 
   #all-stones-global-list {
-    margin-top: 10px;
+    max-height: 55vh;
+  }
+
+  .modal-content {
+    padding: var(--spacing-lg);
+  }
+
+  #connector-overlay {
+    display: none;
   }
 }
 
 @media (max-width: 480px) {
   body {
-    padding: 10px;
+    padding: var(--spacing-sm);
   }
 
   h1 {
@@ -1098,8 +1154,8 @@ h1 {
   }
 
   .subtitle {
-    font-size: 0.9em;
-    margin-bottom: 25px;
+    font-size: 0.95em;
+    margin-bottom: var(--spacing-md);
   }
 
   .top-right-controls {
@@ -1109,118 +1165,115 @@ h1 {
   }
 
   #all-stones-list-btn {
-    width: 40px;
-    height: 40px;
-    padding: 6px;
-  }
-
-  #all-stones-list-btn img {
-    width: 20px;
-    height: 20px;
-  }
-
-  #admin-login-icon {
-    padding: 4px;
-  }
-
-  #admin-login-img {
-    width: 30px;
-    height: 30px;
-  }
-
-  .chakra-svg-container {
-    width: 95%;
-    max-width: 300px;
-  }
-
-  .info-panel {
-    padding: 15px 10px;
-    max-height: 70vh;
-  }
-
-  .info-panel h2 {
-    font-size: 1.3em;
-  }
-
-  .tabs {
-    margin-bottom: 15px;
-  }
-
-  .tab-link {
-    font-size: 0.85em;
-    padding: 8px;
-  }
-
-  #add-stone-form label {
-    font-size: 0.95em;
-  }
-
-  #add-stone-form input[type="text"],
-  #add-stone-form textarea,
-  #add-stone-form select {
-    padding: 8px;
-  }
-
-  #add-stone-form button[type="submit"] {
-    padding: 10px 15px;
-    font-size: 0.95em;
-  }
-
-  #stone-list li,
-  #all-stones-global-list li {
+    width: 48px;
+    height: 48px;
     padding: 10px;
   }
 
-  .stone-info {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
+  #all-stones-list-btn img {
+    width: 26px;
+    height: 26px;
   }
 
-  .stone-list-image,
-  .stone-list-image-placeholder {
-    margin-bottom: 8px;
-    width: 100%;
-    height: auto;
-    max-height: 120px;
-    object-fit: contain;
+  #admin-login-icon {
+    padding: 8px;
   }
 
-  .stone-text {
+  #admin-login-img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .chakra-svg-container {
+    width: 85%;
+    max-width: 280px;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .info-panel {
+    max-height: 75vh;
+    padding: var(--spacing-md);
+  }
+
+  .info-panel h2 {
+    font-size: 1.4em;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .tabs {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .tab-link {
     font-size: 0.9em;
+    padding: 10px 8px;
   }
 
-  .stone-buttons {
-    justify-content: flex-end;
-    margin-top: 10px;
-    padding-top: 8px;
-  }
-
-  .modal-content {
-    padding: 20px 15px;
-    width: 95%;
-  }
-
-  .modal-content h2 {
-    font-size: 1.25em;
-  }
-
-  .modal-content p {
+  .tab-content {
     font-size: 1em;
   }
 
-  .modal-buttons {
+  #tab-general p {
+    font-size: 1em;
+  }
+
+  #add-stone-form label {
+    font-size: 1em;
+    margin-bottom: 6px;
+  }
+
+  #add-stone-form input[type="text"],
+  #add-stone-form textarea {
+    padding: 12px 14px;
+    font-size: 1em;
+  }
+
+  #add-stone-form button[type="submit"] {
+    padding: 14px 20px;
+    font-size: 1.05em;
+    margin-top: var(--spacing-md);
+  }
+
+  #stone-list, #all-stones-global-list {
+    max-height: 45vh;
+  }
+
+  #stone-list li, #all-stones-global-list li {
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+
+  .stone-info {
+    flex-direction: row;
     gap: 10px;
   }
 
-  .modal-buttons button {
-    padding: 8px 20px;
-    font-size: 0.9em;
+  .stone-list-image {
+    width: 70px;
+    height: 70px;
+    align-self: flex-start;
+  }
+
+  .stone-text {
+    font-size: 0.95em;
+  }
+
+  .stone-text strong {
+    font-size: 1.1em;
+  }
+
+  .stone-buttons {
+    gap: 6px;
+  }
+
+  .stone-buttons button {
+    font-size: 1.4rem;
+    padding: 6px;
   }
 
   .all-stones-modal-content {
-    padding: 15px 10px;
-    min-height: 85vh;
+    padding: var(--spacing-md);
+    max-height: 90vh;
   }
 
   .all-stones-controls {
@@ -1229,109 +1282,174 @@ h1 {
   }
 
   #all-stones-search-input {
-    font-size: 0.9em;
+    font-size: 1em;
+    padding: 12px 14px;
   }
 
   .all-stones-sort-options {
-    width: 100%;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .all-stones-sort-options .sort-btn {
-    padding: 6px 10px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+
+  .modal-content {
+    padding: var(--spacing-md);
+  }
+
+  .modal-content h2 {
+    font-size: 1.3em;
+  }
+
+  .modal-buttons button {
+    padding: 12px 18px;
+    font-size: 1em;
+  }
+
+  .jewelry-type-group {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .jewelry-option {
+    padding: 12px 8px;
+    min-height: 70px;
+  }
+
+  .jewelry-option .label {
+    font-size: 0.9em;
+  }
+
+  .image-drop-zone {
+    padding: 20px;
+    min-height: 90px;
+  }
+
+  .close-panel {
+    width: 40px;
+    height: 40px;
+    font-size: 1.6em;
+  }
+
+  .modal .close {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+}
+    padding: 12px;
+  }
+
+  .modal-content h2 {
+    font-size: 1.1em;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .modal-buttons button {
+    padding: 8px 14px;
     font-size: 0.85em;
-    margin-bottom: 5px;
   }
 
-  .stone-chakra-badge {
-    font-size: 0.8em;
-    padding: 3px 6px;
+  .jewelry-type-group {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .jewelry-option {
+    padding: 8px 4px;
+    min-height: 60px;
+  }
+
+  .jewelry-option .label {
+    font-size: 0.75em;
   }
 }
 
-/* ===================== NEW JEWELRY UI ===================== */
-.jewelry-type-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
-  margin-top: 5px;
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    padding: var(--spacing-md);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .container {
+    max-width: 50%;
+    flex: 1 1 250px;
+  }
+
+  .chakra-svg-container {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto var(--spacing-sm) auto;
+  }
+
+  h1 {
+    font-size: 1.5em;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 0.85em;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .info-panel {
+    max-width: 50%;
+    max-height: 90vh;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    bottom: auto;
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+  }
+
+  .info-panel h2 {
+    font-size: 1.2em;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .tab-link {
+    font-size: 0.85em;
+    padding: 8px 10px;
+  }
+
+  .tabs {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  #stone-list {
+    max-height: 55vh;
+  }
+
+  #tab-general p {
+    font-size: 0.9em;
+    line-height: 1.4;
+  }
+}
+    padding: 5px 6px;
+  }
+
+  #stone-list {
+    max-height: 50vh;
+  }
 }
 
-.jewelry-option {
-  background: var(--color-input-bg);
-  border: 1px solid var(--color-input-border);
-  border-radius: 12px;
-  padding: 10px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-  min-height: 80px;
-}
+@media (hover: none) and (pointer: coarse) {
+  .chakra-svg-stone:active {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 30px var(--stone-color));
+  }
 
-.jewelry-option:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-}
+  .tab-link:active {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 
-.jewelry-option.selected {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: var(--active-chakra-color, var(--color-primary-light));
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-}
-
-.jewelry-option .label {
-  font-weight: 500;
-  margin-bottom: 5px;
-  pointer-events: none;
-  /* Let clicks pass to container */
-}
-
-/* Quantity Controls inside the card */
-.jewelry-option .quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 5px;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 4px;
-  border-radius: 20px;
-}
-
-.jewelry-option .qty-btn {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.2s;
-}
-
-.jewelry-option .qty-btn:hover {
-  background: var(--active-chakra-color, var(--color-primary-light));
-}
-
-.jewelry-option .qty-value {
-  font-size: 0.9em;
-  font-weight: bold;
-  min-width: 15px;
-}
-
-/* ===================== MOBILE OPTIMIZATION ===================== */
-@media screen and (max-width: 768px) {
-  #connector-overlay {
-    display: none !important;
+  button:active {
+    transform: scale(0.95);
   }
 }

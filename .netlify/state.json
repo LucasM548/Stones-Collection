@@ -1,7 +1,7 @@
 {
 	"geolocation": {
 		"data": {
-			"city": "Longwy",
+			"city": "Strasbourg",
 			"country": {
 				"code": "FR",
 				"name": "France"
@@ -11,10 +11,10 @@
 				"name": "Grand Est"
 			},
 			"timezone": "Europe/Paris",
-			"latitude": 49.5215,
-			"longitude": 5.7638,
-			"postalCode": "54400"
+			"latitude": 48.5848,
+			"longitude": 7.7419
 		},
-		"timestamp": 1766405604396
-	}
+		"timestamp": 1772446114046
+	},
+	"siteId": "207787d2-07c0-482e-a01e-8eac1d829aa9"
 }
